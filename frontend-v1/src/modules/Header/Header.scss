@@ -1,0 +1,40 @@
+.header {
+    z-index: 1000;
+    box-shadow: rgba(99, 99, 99, 0.1) 0px 2px 2px 0px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0;
+    background-color: white;
+    height: 50px;
+}
+
+.header__center {
+    display: flex;
+    justify-content: center; // центрирует содержимое по горизонтали
+    align-items: center; // центрирует содержимое по вертикали
+    flex-grow: 1; // позволяет блоку занять доступное пространство
+    gap: 10px; // промежуток между элементами
+}
+
+.header__right {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 5px;
+    gap: 10px;
+}
+
+.header__left {
+    display: flex;
+    margin: 4px;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+.header__container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}

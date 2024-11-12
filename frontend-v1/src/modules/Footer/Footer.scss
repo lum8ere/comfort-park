@@ -1,0 +1,48 @@
+.footer {
+    background-color: #f0f0f0;
+    padding: 40px 0;
+
+    .footer-content {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .footer-block {
+        text-align: center;
+
+        .company-logo {
+            margin-bottom: 16px;
+
+            img {
+                max-width: 100px; // Задайте подходящий размер
+                height: auto;
+            }
+        }
+
+        .social-icons {
+            margin-bottom: 16px;
+
+            a {
+                margin: 0 4px;
+            }
+        }
+
+        .footer-list {
+            list-style: none;
+            padding: 0;
+
+            li {
+                margin-bottom: 8px;
+
+                a {
+                    color: rgba(0, 0, 0, 0.85);
+                    transition: color 0.3s;
+
+                    &:hover {
+                        color: #1890ff;
+                    }
+                }
+            }
+        }
+    }
+}
