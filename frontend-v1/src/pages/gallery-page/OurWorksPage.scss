@@ -1,0 +1,45 @@
+.our-works-page {
+    font-family: Arial, sans-serif;
+    padding: 50px;
+    background-color: #ffffff;
+    text-align: center;
+}
+
+.works-title {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+
+.works-description {
+    font-size: 1.2rem;
+    max-width: 800px;
+    margin: 0 auto 40px;
+}
+
+.works-gallery {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.work-item {
+    width: 300px;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #f8f8f8;
+    padding: 10px;
+}
+
+.work-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.work-title {
+    font-size: 1.5rem;
+    margin-top: 10px;
+}
