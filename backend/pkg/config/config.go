@@ -1,8 +1,6 @@
 package config
 
 import (
-	"os"
-
 	"go.uber.org/zap"
 )
 
@@ -12,9 +10,14 @@ type Config struct {
 }
 
 func LoadConfig() *Config {
+	// cfg := &Config{
+	// 	ServerAddress: os.Getenv("SERVER_ADDRESS"),
+	// 	DatabaseURL:   os.Getenv("DATABASE_URL"),
+	// }
+	// временный вариант
 	cfg := &Config{
-		ServerAddress: os.Getenv("SERVER_ADDRESS"),
-		DatabaseURL:   os.Getenv("DATABASE_URL"),
+		ServerAddress: ":9000",
+		DatabaseURL:   "postgres://your_user:yourpassword@localhost:5432/your_database?sslmode=disable",
 	}
 
 	if cfg.ServerAddress == "" {
