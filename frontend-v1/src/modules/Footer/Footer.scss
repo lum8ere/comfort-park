@@ -1,5 +1,5 @@
 .footer {
-    background-color: #f0f0f0;
+    background-color: #8A1414;
     padding: 40px 0;
 
     .footer-content {
@@ -9,6 +9,12 @@
 
     .footer-block {
         text-align: center;
+
+        h5 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            color: #ffffff;
+        }
 
         .company-logo {
             margin-bottom: 16px;
@@ -21,23 +27,35 @@
 
         .social-icons {
             margin-bottom: 16px;
-
+            color: #ffffff;
+        
             a {
                 margin: 0 4px;
+        
+                svg {
+                    fill: #ffffff; // Здесь указываем цвет иконок
+                    transition: fill 0.3s; // Анимация изменения цвета
+        
+                    &:hover {
+                        fill: #1890ff; // Цвет иконки при наведении
+                    }
+                }
             }
         }
 
         .footer-list {
             list-style: none;
             padding: 0;
-
+            margin: 0;
+    
             li {
                 margin-bottom: 8px;
-
+    
                 a {
-                    color: rgba(0, 0, 0, 0.85);
+                    color: #ffffff;
+                    text-decoration: none;
                     transition: color 0.3s;
-
+    
                     &:hover {
                         color: #1890ff;
                     }

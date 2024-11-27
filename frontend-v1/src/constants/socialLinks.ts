@@ -1,4 +1,4 @@
-import { VkIcon, OkIcon, YouTubeIcon, TelegramIcon } from 'assets/social/index';
+import { VkIcon, OkIcon, InstagramIcon, TelegramIcon } from 'assets/social/index';
 
 interface SocialLink {
     name: string;
@@ -13,18 +13,13 @@ export const SOCIAL_LINKS: SocialLink[] = [
         icon: VkIcon
     },
     {
-        name: 'Одноклассники',
-        url: 'https://ok.ru',
-        icon: OkIcon
-    },
-    {
-        name: 'YouTube',
-        url: 'https://www.youtube.com',
-        icon: YouTubeIcon
-    },
-    {
         name: 'Телеграмм',
         url: 'https://t.me',
         icon: TelegramIcon
+    },
+    {
+        name: 'Instagram',
+        url: 'https://www.instagram.com',
+        icon: InstagramIcon
     }
 ];

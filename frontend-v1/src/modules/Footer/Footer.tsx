@@ -38,7 +38,9 @@ export const Footer = () => {
                                 ))}
                             </div>
                             <Title level={5}>{COMPANY_NAME}</Title>
-                            <Text>Телефон: {COMPANY_PHONE}</Text>
+                            <Text style={{
+                                color: 'white'
+                            }}>Телефон: {COMPANY_PHONE}</Text>
                         </div>
                     </Col>
                     {/* БЛОК 2 - КАТАЛОГ */}
