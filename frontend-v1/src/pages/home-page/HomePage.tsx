@@ -25,14 +25,14 @@ export const HomePage = () => {
                             <br />
                             Фото- и видео-отчеты в процессе строительства
                         </Paragraph>
-                        <div className="hero-buttons">
-                            <Button type="primary" size="large" className="calculate-button">
-                                Рассчитать стоимость
-                            </Button>
-                            <Button type="default" size="large" className="projects-button">
-                                Посмотреть проекты
-                            </Button>
-                        </div>
+                    </div>
+                    <div className="hero-buttons">
+                        <Button type="primary" size="large" className="calculate-button">
+                            Рассчитать стоимость
+                        </Button>
+                        <Button type="default" size="large" className="calculate-button">
+                            Посмотреть проекты
+                        </Button>
                     </div>
                 </div>
             </section>

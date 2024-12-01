@@ -33,8 +33,9 @@ export const ServicesCarousel = () => {
                 Наши услуги
             </Title>
             <Carousel
-                dots={false}
-                arrows
+                // dots={false}
+                autoplay
+                autoplaySpeed={3000}
                 slidesToShow={3}
                 slidesToScroll={1}
                 infinite

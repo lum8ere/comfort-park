@@ -10,7 +10,7 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 100%;
+            height: 969px;
             object-fit: cover; // Изображение заполняет блок, сохраняя пропорции
         }
 
@@ -22,59 +22,75 @@
             height: 100%;
             background: rgba(0, 0, 0, 0.5); // Полупрозрачный слой
             display: flex;
-            align-items: center; // Центрируем по вертикали
-            justify-content: flex-start; // Выровнено по левому краю
-        }
+            flex-direction: column;
+            gap: 136px; // Устанавливаем фиксированный отступ между элементами
+            padding: 82px 96px 94px 96px; // Верхний, правый, нижний и левый отступы
+            box-sizing: border-box; // Учитываем паддинги в общую ширину
 
-        .hero-content {
-            max-width: 600px; // Ограничиваем ширину текста
-            margin-left: 10%; // Отступ слева
-            color: #ffffff;
+            .hero-content {
+                max-width: 1200px; // Ограничиваем ширину текста
+                color: #ffffff;
 
-            .hero-title {
-                font-size: 48px; // Размер заголовка
-                font-weight: bold;
-                line-height: 1.2;
-                margin-bottom: 24px;
-            }
+                .hero-title {
+                    font-size: 60px; // Увеличенный размер заголовка
+                    font-weight: bold;
+                    line-height: 1.2;
+                    margin-bottom: 24px;
+                    color: #ffffff;
+                }
 
-            .hero-subtitle {
-                font-size: 20px; // Размер подзаголовка
-                line-height: 1.5;
-                margin-bottom: 32px;
+                .hero-subtitle {
+                    font-size: 24px; // Увеличенный размер подзаголовка
+                    line-height: 1.6;
+                    margin-bottom: 32px;
+                    color: #ffffff;
+                    padding-left: 24px; // Отступ слева (табуляция)
+                }
             }
 
             .hero-buttons {
                 display: flex;
-                gap: 24px; // Отступ между кнопками
+                justify-content: space-between; // Располагаем кнопки по разные стороны
+                align-items: center; // Центрируем кнопки по вертикали
+                width: 100%; // Кнопки занимают всю ширину контейнера
+                /* Удаляем gap: 24px; так как используем фиксированный gap */
+            }
 
-                .calculate-button {
-                    background-color: #8a1414;
-                    color: #ffffff;
-                    border: none;
-                    height: 48px;
-                    font-size: 16px;
-                    padding: 0 32px;
-                    font-weight: bold;
+            // Общие стили для кнопок
+            .calculate-button,
+            .projects-button {
+                width: 580px; // Ширина кнопки
+                height: 155px; // Высота кнопки
+                font-size: 24px; // Размер текста
+                font-weight: bold;
+                border-radius: 8px; // Закругление углов
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                transition: background-color 0.3s, color 0.3s; // Плавные переходы при наведении
+                cursor: pointer; // Изменение курсора при наведении
+                box-sizing: border-box; // Учитываем паддинги и бордеры в размеры
+            }
 
-                    &:hover {
-                        background-color: #a71818;
-                    }
+            .calculate-button {
+                background-color: #8a1414;
+                color: #ffffff;
+                border: none;
+
+                &:hover {
+                    background-color: #a71818;
                 }
+            }
 
-                .projects-button {
-                    background-color: #ffffff;
-                    color: #8a1414;
-                    border: 2px solid #8a1414;
-                    height: 48px;
-                    font-size: 16px;
-                    padding: 0 32px;
-                    font-weight: bold;
+            .projects-button {
+                background-color: #ffffff;
+                color: #8a1414;
+                border: 2px solid #8a1414;
 
-                    &:hover {
-                        color: #ffffff;
-                        background-color: #8a1414;
-                    }
+                &:hover {
+                    color: #ffffff;
+                    background-color: #8a1414;
                 }
             }
         }
