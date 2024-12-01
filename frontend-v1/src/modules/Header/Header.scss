@@ -1,40 +1,141 @@
+// Header.scss
+
+@import 'variables'; // Импортируем переменные
+
 .header {
     z-index: 1000;
-    box-shadow: rgba(99, 99, 99, 0.1) 0px 2px 2px 0px;
+    box-shadow: $header-box-shadow;
     display: flex;
-    justify-content: space-between;
+    justify-content: center; // Центрируем контейнер внутри хедера
     align-items: center;
     padding: 0;
-    background-color: white;
-    height: 50px;
-}
-
-.header__center {
-    display: flex;
-    justify-content: center; // центрирует содержимое по горизонтали
-    align-items: center; // центрирует содержимое по вертикали
-    flex-grow: 1; // позволяет блоку занять доступное пространство
-    gap: 10px; // промежуток между элементами
-}
-
-.header__right {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 0 5px;
-    gap: 10px;
-}
-
-.header__left {
-    display: flex;
-    margin: 4px;
-    gap: 10px;
-    justify-content: center;
-    align-items: center;
+    background-color: $header-background-color; // Устанавливаем фон хедера
+    height: $header-height; // Устанавливаем высоту хедера
 }
 
 .header__container {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     width: 100%;
+    max-width: 1920px; // Максимальная ширина хедера, можно настроить
+    padding-left: $header-horizontal-padding-left; // Отступ слева
+    padding-right: $header-horizontal-padding-right; // Отступ справа
+    box-sizing: border-box;
+}
+
+.header__left {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: $logo-font-size; // Размер текста логотипа
+    font-weight: bold;
+    color: $logo-color; // Цвет логотипа (белый)
+}
+
+.header__center {
+    display: flex;
+    justify-content: center; // Центрируем навигационные кнопки
+    align-items: center;
+    flex-grow: 1; // Занимает доступное пространство между левой и правой частью
+}
+
+.header__center .ant-btn {
+    font-size: $nav-button-font-size; // Размер текста навигационных кнопок
+    color: $nav-button-color; // Цвет текста навигационных кнопок (белый)
+    padding: 0 16px; // Внутренние отступы кнопок
+    height: auto; // Автоматическая высота кнопок
+    // transition: color 0.3s; // Плавный переход цвета текста при наведении
+    background: transparent; // Убираем фон кнопок
+    border: none; // Убираем границу кнопок
+}
+
+.header__center .ant-btn:hover {
+    // color: $nav-button-hover-color; // Цвет текста при наведении
+    background: transparent; // Убедимся, что фон остается прозрачным
+}
+
+.header__right {
+    display: flex;
+    align-items: center;
+    gap: 16px; // Отступ между элементами в правой части
+    padding-right: 0; // Убираем дополнительный отступ, если он был
+}
+
+.header__phone {
+    font-size: $phone-font-size; // Размер текста номера телефона
+    color: $phone-color; // Цвет текста номера телефона (белый)
+}
+
+.header__separator {
+    font-size: $separator-font-size; // Размер текста палочки
+    color: $separator-color; // Цвет текста палочки (белый)
+}
+
+.header__right .ant-btn {
+    font-size: $call-button-font-size; // Размер текста кнопки "Заказать звонок"
+    padding: 8px 16px; // Внутренние отступы кнопки
+    height: $call-button-height; // Высота кнопки
+    background-color: transparent; // Убираем фон кнопки
+    color: $call-button-text-color; // Цвет текста кнопки "Заказать звонок" (белый)
+    border: none; // Убираем границу
+    border-radius: 4px; // Закругленные углы
+    transition: color 0.3s, background-color 0.3s; // Плавные переходы при наведении
+    cursor: pointer; // Указывающий курсор при наведении
+}
+
+.header__right .ant-btn:hover {
+    color: $call-button-hover-text-color; // Цвет текста кнопки при наведении
+    background-color: transparent; // Оставляем фон прозрачным
+}
+
+/* Дополнительные стили для адаптивности */
+@media (max-width: 1200px) {
+    .header__container {
+        padding-left: 50px;
+        padding-right: 50px;
+    }
+
+    .header__center .ant-btn {
+        font-size: 16px;
+        padding: 0 12px;
+    }
+
+    .header__phone,
+    .header__separator {
+        font-size: 16px;
+    }
+
+    .header__right .ant-btn {
+        font-size: 14px;
+        padding: 6px 12px;
+        height: 35px;
+    }
+}
+
+@media (max-width: 768px) {
+    .header__container {
+        flex-direction: column;
+        align-items: flex-start;
+        padding-left: 20px;
+        padding-right: 20px;
+        height: auto;
+    }
+
+    .header__center {
+        width: 100%;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    .header__right {
+        width: 100%;
+        justify-content: flex-start;
+        gap: 8px;
+    }
+
+    .header__right .ant-btn {
+        width: 100%;
+        max-width: 200px;
+    }
 }

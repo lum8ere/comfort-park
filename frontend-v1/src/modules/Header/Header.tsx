@@ -1,5 +1,6 @@
+// Header.tsx
 import { useNavigate } from 'react-router-dom';
-import { Button, Flex, Layout, Space } from 'antd';
+import { Button, Layout, Space } from 'antd';
 import './Header.scss';
 
 export const Header = () => {
@@ -8,28 +9,44 @@ export const Header = () => {
     return (
         <Layout.Header className="header">
             <div className="header__container">
+                {/* Левая часть: Логотип */}
                 <div className="header__left" onClick={() => navigate('/')}>
                     Логотип компании
                 </div>
-                <Flex gap={5} align="center" justify="center" className="header__center">
+
+                {/* Центральная часть: Навигационные кнопки */}
+                <div className="header__center">
                     <Space.Compact>
                         <Button type="text" onClick={() => navigate('/catalog')}>
                             Каталог
                         </Button>
-                        <Button type="text" onClick={() => navigate('/gallery')}>
-                            Наши работы
+                        <Button type="text" onClick={() => navigate('/projects')}>
+                            Наши проекты
                         </Button>
-                        <Button type="text" onClick={() => navigate('/about/company')}>
+                        <Button type="text" onClick={() => navigate('/about')}>
                             О нас
                         </Button>
-                        <Button type="text" onClick={() => navigate('/contacts')}>
+                        <Button type="text" onClick={() => navigate('/services')}>
                             Услуги
                         </Button>
                         <Button type="text" onClick={() => navigate('/contacts')}>
                             Контакты
                         </Button>
                     </Space.Compact>
-                </Flex>
+                </div>
+
+                {/* Правая часть: Номер телефона и кнопка "Заказать звонок" */}
+                <div className="header__right">
+                    <span className="header__phone">+7 (123) 456-78-90</span>
+                    <span className="header__separator">|</span>
+                    <Button
+                        type="text"
+                        className="header__call-button"
+                        onClick={() => navigate('/request-call')}
+                    >
+                        Заказать звонок
+                    </Button>
+                </div>
             </div>
         </Layout.Header>
     );
