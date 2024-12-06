@@ -3,13 +3,17 @@ package db
 import (
 	"backed-api/pkg/config"
 
-	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"go.uber.org/zap"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 func NewDatabase(cfg *config.Config, log *zap.Logger) (*gorm.DB, error) {
-	db, err := gorm.Open("postgres", cfg.DatabaseURL)
+
+	config := config.LoadConfig()
+
+	db, err := gorm.Open(postgres.Open(config.DatabaseURL), &gorm.Config{})
 	if err != nil {
 		log.Error("Failed to connect to database", zap.Error(err))
 		return nil, err

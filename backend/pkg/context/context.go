@@ -1,8 +1,8 @@
 package context
 
 import (
-	"github.com/jinzhu/gorm"
 	"go.uber.org/zap"
+	"gorm.io/gorm"
 )
 
 // AppContext хранит общие ресурсы приложения
