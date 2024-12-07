@@ -21,7 +21,7 @@ func LoadConfig() *Config {
 	}
 
 	if cfg.ServerAddress == "" {
-		cfg.ServerAddress = ":9000" // Значение по умолчанию
+		cfg.ServerAddress = ":4000" // Значение по умолчанию
 	}
 
 	if cfg.DatabaseURL == "" {
