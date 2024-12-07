@@ -1,6 +1,7 @@
 package api
 
 import (
+	"backed-api/pkg/api/handlers"
 	"backed-api/pkg/api/middlewares"
 	"backed-api/pkg/context"
 	"net/http"
@@ -25,9 +26,7 @@ func InitRoutes(r *chi.Mux, db *gorm.DB, log *zap.Logger) {
 		w.Write([]byte("Добро пожаловать на сайт строительной компании"))
 	})
 
-	// r.Get("/catalog", middlewares.JSONResponseMiddleware(handlers.CatalogHandler, appCtx))
-	// r.Get("/projects", middlewares.JSONResponseMiddleware(handlers.ProjectsHandler, appCtx))
-	// r.Get("/about", middlewares.JSONResponseMiddleware(handlers.AboutHandler, appCtx))
-	// r.Get("/services", middlewares.JSONResponseMiddleware(handlers.ServicesHandler, appCtx))
-	// r.Get("/contacts", middlewares.JSONResponseMiddleware(handlers.ContactsHandler, appCtx))
+	r.Get("/buildings", middlewares.JSONResponseMiddleware(handlers.GetBuildingsHandler, appCtx))
+	r.Get("/buildings/{id}", middlewares.JSONResponseMiddleware(handlers.GetBuildingByIDHandler, appCtx))
+	r.Get("/services", middlewares.JSONResponseMiddleware(handlers.GetServiceHandler, appCtx))
 }
