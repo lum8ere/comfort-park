@@ -1,4 +1,5 @@
 import { Button, Typography } from 'antd';
+import { useNavigate } from 'react-router-dom';
 import houseImage from 'assets/home-page-start.png';
 import './HomePage.scss';
 
@@ -8,6 +9,8 @@ import { ServicesCarousel } from './service-carousel/ServicesCarousel';
 const { Title, Paragraph } = Typography;
 
 export const HomePage = () => {
+    const navigate = useNavigate();
+
     return (
         <div className="homepage">
             {/* Hero Section */}
@@ -30,8 +33,8 @@ export const HomePage = () => {
                         <Button type="primary" size="large" className="calculate-button">
                             Рассчитать стоимость
                         </Button>
-                        <Button type="default" size="large" className="calculate-button">
-                            Посмотреть проекты
+                        <Button type="default" size="large" className="calculate-button" onClick={() => navigate('/catalog')}>
+                            Посмотреть каталог
                         </Button>
                     </div>
                 </div>

@@ -20,11 +20,12 @@
 }
 
 .catalog-list {
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-    gap: 20px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); // 4 столбца равной ширины
+    gap: 16px; // расстояние между карточками
+    justify-items: center;
 }
+
 
 .catalog-card {
     width: 300px;

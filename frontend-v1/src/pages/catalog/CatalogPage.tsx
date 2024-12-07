@@ -5,6 +5,7 @@ import { RootState } from 'store';
 import { fetchBuildings } from 'store/slices/buildingsSlice';
 import { useAppDispatch } from 'store/hooks';
 import { Loader } from 'ui/Loader/Loader';
+import { BuildingCard } from 'components/card/buildingCard';
 
 import './CatalogPage.scss';
 
@@ -35,7 +36,7 @@ export const CatalogPage = () => {
             <div className="centered-content">
                 <Title level={3}>Ошибка загрузки данных</Title>
                 <Paragraph>
-                    К сожалению, не удалось загрузить проекты. Попробуйте обновить страницу или
+                    К сожалению, не удалось загрузить каталог. Попробуйте обновить страницу или
                     повторить попытку.
                 </Paragraph>
                 <Button type="primary" onClick={reloadBuildings}>
@@ -51,15 +52,16 @@ export const CatalogPage = () => {
                 Каталог проектов
             </Title>
             <div className="catalog-list">
-                {buildings.map((building, index) => (
-                    <Card
-                        key={index}
-                        hoverable
-                        // cover={<img alt={building.name} src={building.image} />} // Если есть изображения
-                        className="catalog-card"
-                    >
-                        <Meta title={building.name} description={building.description} />
-                    </Card>
+                {buildings.map((building) => (
+                    <BuildingCard
+                        key={building.id}
+                        images={[]} // Если нет изображений, используем пустой массив
+                        name={building.name}
+                        size={building.size}
+                        floors={building.floors}
+                        area={building.area}
+                        badge='Хит продаж'
+                    />
                 ))}
             </div>
         </div>
