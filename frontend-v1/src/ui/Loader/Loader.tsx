@@ -1,5 +1,7 @@
 import { Spin } from "antd";
 
+import "./Loader.scss"
+
 export const Loader = () => {
-  return <Spin />;
+  return <Spin className="custom-spin" />;
 };
