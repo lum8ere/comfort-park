@@ -4,6 +4,7 @@ import (
 	"backed-api/pkg/api"
 	"backed-api/pkg/config"
 	"backed-api/pkg/db"
+	"backed-api/pkg/db/storage"
 	"backed-api/pkg/logger"
 	"net/http"
 
@@ -27,6 +28,8 @@ func main() {
 	if err != nil {
 		log.Fatal("Failed to connect to database", zap.Error(err))
 	}
+
+	storage.InitMinio(cfg.MinioEndpoint, cfg.MinioAccessKey, cfg.MinioSecretKey, false)
 
 	r := chi.NewRouter()
 

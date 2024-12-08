@@ -13,6 +13,8 @@ func NewDatabase(cfg *config.Config, log *zap.Logger) (*gorm.DB, error) {
 
 	config := config.LoadConfig()
 
+	log.Info("config.MinioEndpoint", zap.String("cfg.MinioEndpoint", cfg.MinioEndpoint))
+
 	db, err := gorm.Open(postgres.Open(config.DatabaseURL), &gorm.Config{})
 	if err != nil {
 		log.Error("Failed to connect to database", zap.Error(err))

@@ -14,10 +14,9 @@ interface BuildingCardProps {
     size: string;
     floors: number;
     area: number;
-    mansard?: string;
     material?: string;
     type?: string;
-    price?: string;
+    price?: number;
     badge?: string;
 }
 
@@ -27,7 +26,6 @@ export const BuildingCard: React.FC<BuildingCardProps> = ({
     size,
     floors,
     area,
-    mansard = 'Нет',
     material = 'Не указано',
     type = 'Не указан',
     price = 'От 0 руб',
@@ -52,7 +50,7 @@ export const BuildingCard: React.FC<BuildingCardProps> = ({
 
                 {/* Цена и иконки поверх изображения */}
                 <div className="price-overlay">
-                    <div className="price-text">{price}</div>
+                    <div className="price-text">От {price} руб</div>
                     <div className="icons">
                         {/* <Tooltip title="Добавить в избранное">
                             <HeartOutlined className="icon" />

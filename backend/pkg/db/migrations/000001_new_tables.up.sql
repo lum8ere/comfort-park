@@ -30,5 +30,16 @@ CREATE TABLE buildings (
     floors INT NOT NULL DEFAULT 1, -- количество этажей
     area DECIMAL(10,2) NULL, -- площадь
     description TEXT NULL, -- описание
+    bange TEXT NULL, -- возможность добавлять ХИТ ПРОДАЖ или что-то другое
+    price INT NULL, -- цена
+    created_at TIMESTAMP DEFAULT NOW(), -- дата создания
     is_active BOOLEAN NOT NULL DEFAULT true -- активно или нет
+);
+
+CREATE TABLE photos (
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+    url TEXT NOT NULL, -- URL объекта MinIO
+    building_id TEXT REFERENCES buildings(id) ON DELETE CASCADE,   -- ID дома (nullable, если не привязан к дому)
+    is_gallery BOOLEAN NOT NULL DEFAULT FALSE, -- Флаг для галереи
+    created_at TIMESTAMP DEFAULT NOW()
 );

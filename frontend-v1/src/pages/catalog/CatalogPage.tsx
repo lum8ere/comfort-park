@@ -60,7 +60,8 @@ export const CatalogPage = () => {
                         size={building.size}
                         floors={building.floors}
                         area={building.area}
-                        badge='Хит продаж'
+                        price={building.price}
+                        badge={building.bange}
                     />
                 ))}
             </div>

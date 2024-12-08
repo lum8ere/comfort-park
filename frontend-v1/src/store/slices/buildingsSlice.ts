@@ -10,6 +10,9 @@ export interface Building {
     floors: number; // Количество этажей
     area: number; // Площадь
     description: string; // Описание
+    bange: string;
+    price: number;
+    createdAt: string; //
     isActive: boolean; // Активный статус
 };
 
