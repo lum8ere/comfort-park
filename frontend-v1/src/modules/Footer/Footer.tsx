@@ -1,12 +1,27 @@
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { Layout, Button, Tooltip, Row, Col, Typography } from 'antd';
 import { SOCIAL_LINKS } from 'constants/socialLinks';
 import { COMPANY_NAME, COMPANY_PHONE } from 'constants/constants';
 import { Link } from 'react-router-dom'; // Если используете react-router
 import './Footer.scss';
+import { useAppDispatch } from 'store/hooks';
+import { fetchBuildings } from 'store/slices/buildings/buildingsSlice';
+import { selectFooterBuildings } from 'store/slices/buildings/buildingSelectors';
+import { RootState } from 'store';
 
 const { Title, Text } = Typography;
 
 export const Footer = () => {
+    const dispatch = useAppDispatch();
+
+    const { loading, error } = useSelector((state: RootState) => state.buildings);
+    const footerBuildings = useSelector(selectFooterBuildings);
+
+    useEffect(() => {
+        dispatch(fetchBuildings());
+    }, [dispatch]);
+
     return (
         <Layout.Footer className="footer">
             <div className="footer-content">
@@ -38,9 +53,13 @@ export const Footer = () => {
                                 ))}
                             </div>
                             <Title level={5}>{COMPANY_NAME}</Title>
-                            <Text style={{
-                                color: 'white'
-                            }}>Телефон: {COMPANY_PHONE}</Text>
+                            <Text
+                                style={{
+                                    color: 'white'
+                                }}
+                            >
+                                Телефон: {COMPANY_PHONE}
+                            </Text>
                         </div>
                     </Col>
                     {/* БЛОК 2 - КАТАЛОГ */}
@@ -48,13 +67,15 @@ export const Footer = () => {
                         <div className="footer-block">
                             <Title level={5}>Каталог</Title>
                             <ul className="footer-list">
-                                <li>
-                                    <Link to="/catalog/item1">Пункт 1</Link>
-                                </li>
-                                <li>
-                                    <Link to="/catalog/item2">Пункт 2</Link>
-                                </li>
-                                {/* Добавьте остальные пункты каталога */}
+                                {/* Проверяем, есть ли ошибка. Если есть, ничего не отображаем */}
+                                {!error &&
+                                    footerBuildings.map((building) => (
+                                        <li key={building.id}>
+                                            <Link to={`/catalog/${building.id}`}>
+                                                {building.name}
+                                            </Link>
+                                        </li>
+                                    ))}
                             </ul>
                         </div>
                     </Col>
@@ -75,13 +96,7 @@ export const Footer = () => {
                             <Title level={5}>О нас</Title>
                             <ul className="footer-list">
                                 <li>
-                                    <Link to="/about/company">О компании</Link>
-                                </li>
-                                <li>
-                                    <Link to="/about/products">О продукции</Link>
-                                </li>
-                                <li>
-                                    <Link to="/cooperation">Сотрудничество</Link>
+                                    <Link to="/about">О компании</Link>
                                 </li>
                                 <li>
                                     <Link to="/contacts">Контакты</Link>

@@ -1,27 +1,52 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Card, Col, Row, Typography } from 'antd';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store';
-import { fetchBuildings } from 'store/slices/buildingsSlice';
+import { fetchBuildings } from 'store/slices/buildings/buildingsSlice';
 import { useAppDispatch } from 'store/hooks';
 import { Loader } from 'ui/Loader/Loader';
 import { BuildingCard } from 'components/card/buildingCard';
+import { selectBuildings, selectCatalogBuildings } from 'store/slices/buildings/buildingSelectors';
 
 import './CatalogPage.scss';
 
 const { Title, Paragraph } = Typography;
 
 export const CatalogPage = () => {
-    const { buildings, loading, error } = useSelector((state: RootState) => state.buildings);
     const dispatch = useAppDispatch();
+
+    // Селектор для получения всех зданий
+    const buildings = useSelector(selectBuildings);
+
+    const { loading, error } = useSelector((state: RootState) => state.buildings);
+
+    // Состояние для управления количеством видимых зданий
+    const [visibleCount, setVisibleCount] = useState(6);
 
     const reloadBuildings = () => {
         dispatch(fetchBuildings());
     };
 
+    // Загрузить данные при монтировании компонента
     useEffect(() => {
         dispatch(fetchBuildings());
     }, [dispatch]);
+
+    // Обработчик события прокрутки
+    const handleScroll = () => {
+        if (
+            window.innerHeight + document.documentElement.scrollTop >=
+            document.documentElement.offsetHeight - 100
+        ) {
+            setVisibleCount((prev) => prev + 6); // Увеличиваем количество видимых элементов
+        }
+    };
+
+    // Добавляем обработчик прокрутки
+    useEffect(() => {
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
     if (loading)
         return (

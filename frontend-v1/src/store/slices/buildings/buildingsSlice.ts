@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axiosInstance from '../../service/axiosConfig';
+import axiosInstance from '../../../service/axiosConfig';
 
 export interface Building {
     id: string; // Уникальный идентификатор
