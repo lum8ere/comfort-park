@@ -20,7 +20,7 @@
     width: 100%;
     max-width: 1920px; // Максимальная ширина хедера, можно настроить
     padding-left: $header-horizontal-padding-left; // Отступ слева
-    padding-right: $header-horizontal-padding-right; // Отступ справа
+    // padding-right: $header-horizontal-padding-right; // Отступ справа
     box-sizing: border-box;
 }
 
@@ -45,13 +45,11 @@
     color: $nav-button-color; // Цвет текста навигационных кнопок (белый)
     padding: 0 16px; // Внутренние отступы кнопок
     height: auto; // Автоматическая высота кнопок
-    // transition: color 0.3s; // Плавный переход цвета текста при наведении
-    background: transparent; // Убираем фон кнопок
     border: none; // Убираем границу кнопок
 }
 
 .header__center .ant-btn:hover {
-    // color: $nav-button-hover-color; // Цвет текста при наведении
+    color: $nav-button-color; // Цвет текста при наведении
     background: transparent; // Убедимся, что фон остается прозрачным
 }
 

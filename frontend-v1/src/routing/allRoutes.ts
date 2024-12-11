@@ -11,7 +11,7 @@ export const baseRoutes: RoutesType[] = [
         component: HomePage
     },
     {
-        path: '/about/company',
+        path: '/about',
         component: AboutPage
     },
     {

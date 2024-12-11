@@ -17,19 +17,39 @@ export const Header = () => {
                 {/* Центральная часть: Навигационные кнопки */}
                 <div className="header__center">
                     <Space.Compact>
-                        <Button type="text" onClick={() => navigate('/catalog')}>
+                        <Button
+                            type="text"
+                            className="header__nav-button"
+                            onClick={() => navigate('/catalog')}
+                        >
                             Каталог
                         </Button>
-                        <Button type="text" onClick={() => navigate('/projects')}>
+                        <Button
+                            type="text"
+                            className="header__nav-button"
+                            onClick={() => navigate('/projects')}
+                        >
                             Наши проекты
                         </Button>
-                        <Button type="text" onClick={() => navigate('/about')}>
+                        <Button
+                            type="text"
+                            className="header__nav-button"
+                            onClick={() => navigate('/about')}
+                        >
                             О нас
                         </Button>
-                        <Button type="text" onClick={() => navigate('/services')}>
+                        <Button
+                            type="text"
+                            className="header__nav-button"
+                            onClick={() => navigate('/services')}
+                        >
                             Услуги
                         </Button>
-                        <Button type="text" onClick={() => navigate('/contacts')}>
+                        <Button
+                            type="text"
+                            className="header__nav-button"
+                            onClick={() => navigate('/contacts')}
+                        >
                             Контакты
                         </Button>
                     </Space.Compact>
