@@ -4,6 +4,7 @@ import { CatalogPage } from 'pages/catalog/CatalogPage';
 import { CatalogDetailPage } from 'pages/catalogDetailPage/CatalogDetailPage';
 import { OurWorksPage } from 'pages/gallery-page/OurWorksPage';
 import { HomePage } from 'pages/home-page/HomePage';
+import { ServicePage } from 'pages/service-page/ServicePage';
 import { RoutesType } from 'routing/routesTypes';
 
 export const baseRoutes: RoutesType[] = [
@@ -24,7 +25,11 @@ export const baseRoutes: RoutesType[] = [
         component: CatalogDetailPage
     },
     {
-        path: '/gallery',
+        path: '/projects',
         component: OurWorksPage
+    },
+    {
+        path: '/services',
+        component: ServicePage
     }
 ];

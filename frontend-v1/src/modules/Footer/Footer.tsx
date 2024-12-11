@@ -85,7 +85,7 @@ export const Footer = () => {
                             <Title level={5}>Наши работы</Title>
                             <ul className="footer-list">
                                 <li>
-                                    <Link to="/gallery">Фотогалерея</Link>
+                                    <Link to="/projects">Готовые проекты</Link>
                                 </li>
                             </ul>
                         </div>

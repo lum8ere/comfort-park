@@ -5,14 +5,14 @@ import { RootState } from 'store';
 import { fetchBuildings } from 'store/slices/buildings/buildingsSlice';
 import { useAppDispatch } from 'store/hooks';
 import { Loader } from 'ui/Loader/Loader';
-import { BuildingCard } from 'components/card/building/buildingCard';
-import { selectBuildings } from 'store/slices/buildings/buildingSelectors';
+import { ServiceCard } from 'components/card/service/ServiceCard';
+import { selectBuildings, selectCatalogBuildings } from 'store/slices/buildings/buildingSelectors';
 
-import './CatalogPage.scss';
+import './ServicePage.scss';
 
 const { Title, Paragraph } = Typography;
 
-export const CatalogPage = () => {
+export const ServicePage = () => {
     const dispatch = useAppDispatch();
 
     // Селектор для получения всех зданий
@@ -72,38 +72,23 @@ export const CatalogPage = () => {
 
     return (
         <div className="catalog-page">
-            <section className="catalog-title">
-                <h1>Каталог</h1>
-            </section>
+            <Title level={1} className="catalog-title">
+                Услуги
+            </Title>
 
-            <section className="catalog-title">
-                <Row gutter={[16, 16]} style={{ justifyContent: 'center' }}>
-                    {buildings.map((building) => (
-                        <Col
-                            key={building.id}
-                            xs={24} // на мобильных устройствах 1 карточка в ряд
-                            sm={12} // на планшетах 2 карточки в ряд
-                            md={8} // на десктопах 3 карточки в ряд
-                            style={{
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center'
-                            }}
-                        >
-                            <BuildingCard
-                                id={building.id}
-                                images={building.photos || []}
-                                name={building.name}
-                                size={building.size}
-                                floors={building.floors}
-                                area={building.area}
-                                price={building.price}
-                                badge={building.bange}
-                            />
-                        </Col>
-                    ))}
-                </Row>
-            </section>
+            <Row gutter={[16, 16]} style={{ justifyContent: 'center' }}>
+                {buildings.map((building) => (
+                    <Col
+                        key={building.id}
+                        xs={24} // на мобильных устройствах 1 карточка в ряд
+                        sm={12} // на планшетах 2 карточки в ряд
+                        md={8} // на десктопах 3 карточки в ряд
+                        style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+                    >
+                        <ServiceCard />
+                    </Col>
+                ))}
+            </Row>
         </div>
     );
 };
