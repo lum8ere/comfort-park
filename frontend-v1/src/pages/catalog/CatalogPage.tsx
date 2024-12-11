@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Button, Card, Typography } from 'antd';
+import { Button, Card, Col, Row, Typography } from 'antd';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store';
 import { fetchBuildings } from 'store/slices/buildingsSlice';
@@ -10,7 +10,6 @@ import { BuildingCard } from 'components/card/buildingCard';
 import './CatalogPage.scss';
 
 const { Title, Paragraph } = Typography;
-const { Meta } = Card;
 
 export const CatalogPage = () => {
     const { buildings, loading, error } = useSelector((state: RootState) => state.buildings);
@@ -51,20 +50,28 @@ export const CatalogPage = () => {
             <Title level={1} className="catalog-title">
                 Каталог проектов
             </Title>
-            <div className="catalog-list">
+
+            <Row gutter={[16, 16]} style={{ justifyContent: "center" }}>
                 {buildings.map((building) => (
-                    <BuildingCard
+                    <Col
                         key={building.id}
-                        images={[]} // Если нет изображений, используем пустой массив
-                        name={building.name}
-                        size={building.size}
-                        floors={building.floors}
-                        area={building.area}
-                        price={building.price}
-                        badge={building.bange}
-                    />
+                        xs={24} // на мобильных устройствах 1 карточка в ряд
+                        sm={12} // на планшетах 2 карточки в ряд
+                        md={8}  // на десктопах 3 карточки в ряд
+                        style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+                    >
+                        <BuildingCard
+                            images={building.photos || []}
+                            name={building.name}
+                            size={building.size}
+                            floors={building.floors}
+                            area={building.area}
+                            price={building.price}
+                            badge={building.bange}
+                        />
+                    </Col>
                 ))}
-            </div>
+            </Row>
         </div>
     );
 };

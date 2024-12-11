@@ -10,6 +10,7 @@ export interface Building {
     floors: number; // Количество этажей
     area: number; // Площадь
     description: string; // Описание
+    photos: string[];
     bange: string;
     price: number;
     createdAt: string; //

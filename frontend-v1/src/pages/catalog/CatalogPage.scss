@@ -1,11 +1,4 @@
-.centered-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    // height: 100vh; // Высота на весь экран
-    text-align: center;
-}
+/* CatalogPage.scss */
 
 .catalog-page {
     font-family: Arial, sans-serif;
@@ -21,31 +14,44 @@
 
 .catalog-list {
     display: grid;
-    grid-template-columns: repeat(4, 1fr); // 4 столбца равной ширины
-    gap: 16px; // расстояние между карточками
+    grid-template-columns: repeat(3, 1fr); // 3 колонки
+    gap: 123px; // расстояние между карточками 123px
     justify-items: center;
-}
 
+    // Адаптив для мобильных устройств
+    // При ширине меньше 768px будет 1 колонка
+    @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+        gap: 40px; // можно уменьшить отступ для мобильного
+    }
+}
 
 .catalog-card {
     width: 300px;
     border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+    img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+    }
+
+    .ant-card-meta-title {
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+    }
+
+    .ant-card-meta-description {
+        font-size: 1.1rem;
+        color: #666;
+    }
 }
 
-.catalog-card img {
-    width: 100%;
-    height: auto;
-    object-fit: cover;
-}
-
-.catalog-card .ant-card-meta-title {
-    font-size: 1.5rem;
-    margin-bottom: 10px;
-}
-
-.catalog-card .ant-card-meta-description {
-    font-size: 1.1rem;
-    color: #666;
+/* Добавьте этот класс для центрирования колонок */
+.centered-col {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
