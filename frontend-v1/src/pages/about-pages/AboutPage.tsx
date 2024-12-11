@@ -1,80 +1,128 @@
 import React from 'react';
+import { Layout, Row, Col, Card } from 'antd';
 import './AboutPage.scss';
+
+const { Content } = Layout;
 
 export const AboutPage: React.FC = () => {
     return (
-        <div className="homePageRoot">
+        <Layout className="about-page-layout">
             {/* Hero Section */}
-            <section className="heroSection">О нас</section>
+            <section className="heroSection">
+                <h1>О нас</h1>
+            </section>
 
             {/* О нашей компании Section */}
-            <section className="aboutSection">
-                <h2 className="aboutSection-title">О нашей компании</h2>
-                <div className="aboutSection-content">
-                    <h3 className="aboutSection-heading">Строительная компания "Парк-комфорт"</h3>
-                    <div className="aboutSection-inner">
-                        <div className="aboutSection-imageWrap">
-                            <img
-                                src="src/assets/svidetel-iz-fryazino.jpg"
-                                alt="Свидетель из Фрязино"
-                            />
-                            <div className="aboutSection-imageWrap-caption">
+            <section className="companySection">
+                <div className="overlay" />
+                <div className="info-companySection">
+                    <h2>О нашей компании</h2>
+                </div>
+            </section>
+
+            {/* Генеральный директор */}
+            <section className="aboutSectionContent">
+                <h3 className="subTitle">Строительная компания "Парк-комфорт"</h3>
+                <Row gutter={[20, 20]} className="aboutSection-inner">
+                    <Col xs={24} md={8} className="aboutSection-imageWrap">
+                        <Card
+                            hoverable
+                            cover={
+                                <img
+                                    src="src/assets/image2.png"
+                                    alt="Свидетель из Фрязино"
+                                    style={{ borderRadius: '10px 10px 0 0' }}
+                                />
+                            }
+                            style={{ borderRadius: '10px', overflow: 'hidden' }}
+                            styles={{body: { textAlign: 'center' }}}
+                        >
+                            <div style={{ fontWeight: 'bold' }}>
                                 Свидетель из Фрязино
                                 <br />
                                 Генеральный директор
                             </div>
-                        </div>
-                        <div className="aboutSection-text">
+                        </Card>
+                    </Col>
+                    <Col xs={24} md={16}>
+                        <Card style={{ background: 'rgba(255,255,255,0.8)' }}>
                             <p>
-                                Строительная компания “Парк-комфорт” – ......
-                                {/* Добавьте описание вашей компании */}
+                                Строительная компания “Парк-комфорт” – ... (Описание компании) ...
                             </p>
-                        </div>
-                    </div>
-                </div>
+                        </Card>
+                    </Col>
+                </Row>
             </section>
 
             {/* Наши ценности Section */}
-            <section className="valuesSection">
-                <h2 className="valuesSection-title">Наши ценности</h2>
-                {/* Добавьте описание ценностей компании */}
+            <section className="companySection">
+                <div className="overlay" />
+                <div className="info-companySection">
+                    <h2>Наши ценности</h2>
+                    <div className="companyDescription">Описание ценностей компании...</div>
+                </div>
             </section>
 
             {/* Наша команда Section */}
-            <section className="teamSection">
-                <h2 className="teamSection-title">Наша команда</h2>
-                <div className="teamSection-wrap">
-                    {/* Team member 1 */}
-                    <div className="teamSection-member">
-                        <img src="src/assets/svidetel-iz-fryazino.jpg" alt="Свидетель из Фрязино" />
-                        <div className="teamSection-member-caption">
-                            Свидетель из Фрязино
+            {/* <section className="teamSection">
+                <h2 className="sectionTitle">Наша команда</h2>
+                <Row gutter={[20, 20]} justify="center">
+                    <Col xs={24} sm={12} md={8} lg={6}>
+                        <Card
+                            hoverable
+                            cover={
+                                <img
+                                    src="src/assets/image2.png"
+                                    alt="Свидетель из Фрязино"
+                                    style={{ borderRadius: '10px 10px 0 0' }}
+                                />
+                            }
+                            style={{ borderRadius: '10px', overflow: 'hidden' }}
+                            bodyStyle={{ textAlign: 'center' }}
+                        >
+                            <strong>Свидетель из Фрязино</strong>
                             <br />
                             Генеральный директор
-                        </div>
-                    </div>
-
-                    {/* Team member 2 */}
-                    <div className="teamSection-member">
-                        <img src="src/assets/shkolnik-v-bolote.jpg" alt="Школьник в болоте" />
-                        <div className="teamSection-member-caption">
-                            Школьник в болоте
+                        </Card>
+                    </Col>
+                    <Col xs={24} sm={12} md={8} lg={6}>
+                        <Card
+                            hoverable
+                            cover={
+                                <img
+                                    src="src/assets/image2.png"
+                                    alt="Школьник в болоте"
+                                    style={{ borderRadius: '10px 10px 0 0' }}
+                                />
+                            }
+                            style={{ borderRadius: '10px', overflow: 'hidden' }}
+                            bodyStyle={{ textAlign: 'center' }}
+                        >
+                            <strong>Школьник в болоте</strong>
                             <br />
                             Менеджер по ... (указать должность)
-                        </div>
-                    </div>
-
-                    {/* Team member 3 */}
-                    <div className="teamSection-member">
-                        <img src="src/assets/vazhniy-shi-fu.jpg" alt="Важный Ши Фу" />
-                        <div className="teamSection-member-caption">
-                            Важный Ши Фу
+                        </Card>
+                    </Col>
+                    <Col xs={24} sm={12} md={8} lg={6}>
+                        <Card
+                            hoverable
+                            cover={
+                                <img
+                                    src="src/assets/image2.png"
+                                    alt="Важный Ши Фу"
+                                    style={{ borderRadius: '10px 10px 0 0' }}
+                                />
+                            }
+                            style={{ borderRadius: '10px', overflow: 'hidden' }}
+                            bodyStyle={{ textAlign: 'center' }}
+                        >
+                            <strong>Важный Ши Фу</strong>
                             <br />
                             Бригадир
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </div>
+                        </Card>
+                    </Col>
+                </Row>
+            </section> */}
+        </Layout>
     );
 };

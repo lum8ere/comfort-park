@@ -1,60 +1,169 @@
-.about-page {
+.about-page-layout {
     font-family: Arial, sans-serif;
     color: #333;
     line-height: 1.6;
-    padding: 50px;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* Предотвращаем горизонтальный скролл */
 }
 
-/* About Hero Section */
-.about-hero {
-    text-align: center;
-    margin-bottom: 40px;
+.heroSection {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100px;
+    h1 {
+        color: #8e3131;
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin: 0;
+    }
 }
 
-.about-hero h1 {
-    font-size: 2.5rem;
-    margin-bottom: 20px;
+@media (max-width: 768px) {
+    .companySection {
+        height: auto;
+        padding: 40px 20px;
+    }
+
+    .info-companySection {
+        padding: 10px;
+    }
+
+    h2 {
+        font-size: 1.8rem;
+    }
+
+    .companyDescription {
+        font-size: 1rem;
+    }
 }
 
-.about-hero p {
-    font-size: 1.2rem;
-    max-width: 800px;
+.companySection {
+    position: relative;
+    width: 100%;
+    height: 489px;
+    background: url('src/assets/home-page-finish.png') center center / cover no-repeat;
+    display: flex;
+    flex-direction: column; /* Изменено на колонку */
+    align-items: center;
+    justify-content: center; /* Центрируем содержимое по вертикали */
+    color: #fff;
+    font-weight: bold;
+
+    .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 1;
+    }
+
+    .info-companySection {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        max-width: 800px; /* Ограничиваем максимальную ширину */
+        padding: 20px;
+
+        h2 {
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 20px; /* Отступ снизу для разделения заголовка и описания */
+        }
+
+        .companyDescription {
+            text-align: center; /* Центрируем текст описания */
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+    }
+}
+
+
+.aboutSectionContent {
+    padding: 0px 20px 195px ;
+    max-width: 1280px;
     margin: 0 auto;
+
+    .subTitle {
+        font-size: 48px;
+        margin-bottom: 20px;
+        color: #8e3131;
+        font-weight: bold;
+        text-align: center;
+        padding-bottom: 112px;
+    }
+
+    .aboutSection-inner {
+        margin-top: 20px;
+    }
 }
 
-/* About Values Section */
-.about-values {
-    background-color: #f8f8f8;
-    padding: 40px;
+.valuesSection {
+    margin: 40px 0;
+    position: relative;
+    background: url('src/assets/home-page-finish.png') center center / cover no-repeat;
+    padding: 60px 20px;
     border-radius: 10px;
-    margin-bottom: 40px;
+
+    .sectionTitle {
+        text-align: center;
+        color: #fff;
+        font-weight: bold;
+        font-size: 2rem;
+        position: relative;
+        margin-bottom: 40px;
+
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
+
+        h2 {
+            position: relative;
+            z-index: 2;
+        }
+    }
+
+    .ant-card {
+        max-width: 800px;
+        margin: 0 auto;
+        background: rgba(255, 255, 255, 0.8);
+        position: relative;
+        z-index: 2;
+    }
 }
 
-.about-values h2 {
-    font-size: 2rem;
-    margin-bottom: 20px;
-}
+.teamSection {
+    margin: 40px 0;
 
-.about-values p {
-    font-size: 1.1rem;
-    max-width: 800px;
-    margin: 0 auto;
-}
+    .sectionTitle {
+        text-align: center;
+        font-weight: bold;
+        font-size: 2rem;
+        margin-bottom: 40px;
+        color: #333;
+    }
 
-/* About Team Section */
-.about-team {
-    padding: 40px;
-    background-color: #ffffff;
-    border-radius: 10px;
-}
+    .ant-card {
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 
-.about-team h2 {
-    font-size: 2rem;
-    margin-bottom: 20px;
-}
-
-.about-team p {
-    font-size: 1.1rem;
-    max-width: 800px;
-    margin: 0 auto;
+        strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+    }
 }
