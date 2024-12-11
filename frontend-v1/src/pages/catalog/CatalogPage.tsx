@@ -76,16 +76,17 @@ export const CatalogPage = () => {
                 Каталог проектов
             </Title>
 
-            <Row gutter={[16, 16]} style={{ justifyContent: "center" }}>
+            <Row gutter={[16, 16]} style={{ justifyContent: 'center' }}>
                 {buildings.map((building) => (
                     <Col
                         key={building.id}
                         xs={24} // на мобильных устройствах 1 карточка в ряд
                         sm={12} // на планшетах 2 карточки в ряд
-                        md={8}  // на десктопах 3 карточки в ряд
+                        md={8} // на десктопах 3 карточки в ряд
                         style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
                     >
                         <BuildingCard
+                            id={building.id}
                             images={building.photos || []}
                             name={building.name}
                             size={building.size}

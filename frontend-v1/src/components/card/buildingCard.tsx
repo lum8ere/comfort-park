@@ -4,10 +4,12 @@ import { ChartArea, HouseSize, StairsFloor } from 'assets/card';
 import testImage from 'assets/testImage.png';
 
 import './BuildingCard.scss';
+import { useNavigate } from 'react-router-dom';
 
 const { Title, Paragraph } = Typography;
 
 interface BuildingCardProps {
+    id: string;
     images: string[];
     name: string;
     size: string;
@@ -20,6 +22,7 @@ interface BuildingCardProps {
 }
 
 export const BuildingCard: React.FC<BuildingCardProps> = ({
+    id,
     images,
     name,
     size,
@@ -27,6 +30,8 @@ export const BuildingCard: React.FC<BuildingCardProps> = ({
     area,
     badge
 }) => {
+    const navigate = useNavigate();
+
     const displayImages = images.length > 0 ? images : [testImage];
 
     return (
@@ -83,7 +88,7 @@ export const BuildingCard: React.FC<BuildingCardProps> = ({
                     </div>
 
                     <div className="button-wrapper">
-                        <Button className="details-button">Подробнее</Button>
+                        <Button className="details-button" onClick={() => navigate(`/catalog/${id}`)}>Подробнее</Button>
                     </div>
                 </div>
             </div>

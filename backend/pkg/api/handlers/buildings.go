@@ -20,8 +20,6 @@ func GetBuildingsHandler(appCtx *context.AppContext, r *http.Request) (interface
 		return nil, err
 	}
 
-	appCtx.Logger.Info("buildings", zap.Any("buildings", buildings))
-
 	type BuildingResponse struct {
 		ID        string    `json:"id"`
 		Name      string    `json:"name"`
@@ -60,22 +58,57 @@ func GetBuildingsHandler(appCtx *context.AppContext, r *http.Request) (interface
 }
 
 func GetBuildingByIDHandler(appCtx *context.AppContext, r *http.Request) (interface{}, error) {
-	appCtx.Logger.Info("Handling Buildings request")
+	appCtx.Logger.Info("Handling Building by id request")
 
 	// Извлекаем параметр 'id' из URL
 	id := chi.URLParam(r, "id")
+
+	appCtx.Logger.Info("Handling Building by id request", zap.String("id", id))
 	if id == "" {
 		appCtx.Logger.Warn("ID parameter is missing")
 		return map[string]string{"error": "ID parameter is missing"}, nil
 	}
 
 	// Получаем данные из базы данных
-	var buildings []model.Building
-	if err := appCtx.DB.Where("id = ?", id).Find(&buildings).Error; err != nil {
-		appCtx.Logger.Error("Failed to fetch buildings", zap.Error(err))
+	var building model.Building
+	if err := appCtx.DB.Preload("Photos").Preload("DictsBuildingCategory").Preload("DictsMaterials").Where("id = ?", id).Find(&building).Error; err != nil {
+		appCtx.Logger.Error("Failed to fetch building", zap.Error(err))
 		return nil, err
 	}
 
-	appCtx.Logger.Info("Successfully fetched buildings", zap.Int("count", len(buildings)))
-	return buildings, nil
+	type BuildingResponse struct {
+		ID          string    `json:"id"`
+		Name        string    `json:"name"`
+		Size        string    `json:"size"`
+		Floors      int32     `json:"floors"`
+		Description string    `json:"description"`
+		Area        float64   `json:"area"`
+		Material    string    `json:"material"`
+		Category    string    `json:"category"`
+		Price       int32     `json:"price"`
+		Photos      []string  `json:"photos"`
+		CreatedAt   time.Time `json:"created_at"`
+	}
+
+	var response BuildingResponse
+	var photos []string
+	for _, p := range building.Photos {
+		photos = append(photos, p.URL) // Предполагается, что URL уже является доступным
+	}
+	response = BuildingResponse{
+		ID:          building.ID,
+		Name:        building.Name,
+		Size:        building.Size,
+		Floors:      building.Floors,
+		Area:        building.Area,
+		Material:    building.DictsMaterials.Name,
+		Category:    building.DictsBuildingCategory.Name,
+		Description: building.Description,
+		Price:       building.Price,
+		Photos:      photos,
+		CreatedAt:   building.CreatedAt,
+	}
+
+	appCtx.Logger.Info("Successfully fetched building by id")
+	return response, nil
 }

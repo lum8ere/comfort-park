@@ -15,7 +15,7 @@ const { Title, Text } = Typography;
 export const Footer = () => {
     const dispatch = useAppDispatch();
 
-    const { loading, error } = useSelector((state: RootState) => state.buildings);
+    const { error } = useSelector((state: RootState) => state.buildings);
     const footerBuildings = useSelector(selectFooterBuildings);
 
     useEffect(() => {
