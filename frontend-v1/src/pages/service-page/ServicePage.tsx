@@ -1,35 +1,35 @@
-import { useEffect, useState } from 'react';
-import { Button, Card, Col, Row, Typography } from 'antd';
+import { memo, useEffect, useState } from 'react';
+import { Button, Col, Row, Typography } from 'antd';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store';
-import { fetchBuildings } from 'store/slices/buildings/buildingsSlice';
+import { fetchServices } from 'store/slices/services/servicesSlice';
 import { useAppDispatch } from 'store/hooks';
 import { Loader } from 'ui/Loader/Loader';
 import { ServiceCard } from 'components/card/service/ServiceCard';
-import { selectBuildings, selectCatalogBuildings } from 'store/slices/buildings/buildingSelectors';
+import { selectServises } from 'store/slices/services/serviceSelectors';
 
 import './ServicePage.scss';
 
 const { Title, Paragraph } = Typography;
 
-export const ServicePage = () => {
+export const ServicePage = memo(() => {
     const dispatch = useAppDispatch();
 
     // Селектор для получения всех зданий
-    const buildings = useSelector(selectBuildings);
+    const services = useSelector(selectServises);
 
-    const { loading, error } = useSelector((state: RootState) => state.buildings);
+    const { loading, error } = useSelector((state: RootState) => state.services);
 
     // Состояние для управления количеством видимых зданий
     const [visibleCount, setVisibleCount] = useState(6);
 
-    const reloadBuildings = () => {
-        dispatch(fetchBuildings());
+    const reloadSerivce = () => {
+        dispatch(fetchServices());
     };
 
     // Загрузить данные при монтировании компонента
     useEffect(() => {
-        dispatch(fetchBuildings());
+        dispatch(fetchServices());
     }, [dispatch]);
 
     // Обработчик события прокрутки
@@ -63,7 +63,7 @@ export const ServicePage = () => {
                     К сожалению, не удалось загрузить каталог. Попробуйте обновить страницу или
                     повторить попытку.
                 </Paragraph>
-                <Button type="primary" onClick={reloadBuildings}>
+                <Button type="primary" onClick={reloadSerivce}>
                     Повторить попытку
                 </Button>
             </div>
@@ -71,24 +71,24 @@ export const ServicePage = () => {
     }
 
     return (
-        <div className="catalog-page">
-            <Title level={1} className="catalog-title">
-                Услуги
-            </Title>
+        <div className="service-page">
+            <section className="service-title">
+                <h1>Услуги</h1>
+            </section>
 
             <Row gutter={[16, 16]} style={{ justifyContent: 'center' }}>
-                {buildings.map((building) => (
+                {services.map((service) => (
                     <Col
-                        key={building.id}
+                        key={service.id}
                         xs={24} // на мобильных устройствах 1 карточка в ряд
                         sm={12} // на планшетах 2 карточки в ряд
                         md={8} // на десктопах 3 карточки в ряд
                         style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
                     >
-                        <ServiceCard />
+                        <ServiceCard imageURL={service.image_url} name={service.name} />
                     </Col>
                 ))}
             </Row>
         </div>
     );
-};
+});

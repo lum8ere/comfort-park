@@ -47,7 +47,7 @@ export const Header = () => {
                     <Button
                         type="text"
                         className="header__call-button"
-                        onClick={() => navigate('/request-call')}
+                        // onClick={() => navigate('/request-call')}
                     >
                         Заказать звонок
                     </Button>
@@ -87,7 +87,7 @@ export const Header = () => {
                             type="text"
                             className="drawer__call-button"
                             onClick={() => {
-                                navigate('/request-call');
+                                // navigate('/request-call');
                                 setIsDrawerOpen(false);
                             }}
                             block

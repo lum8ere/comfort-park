@@ -6,7 +6,7 @@ export interface Service {
     name: string;
     description: string;
     price: number;
-    imageURL: string; //
+    image_url: string; //
     isActive: boolean; // Активный статус
 };
 
@@ -28,7 +28,7 @@ export const fetchServices = createAsyncThunk('services/fetch', async () => {
     return response.data;
 });
 
-const buildingsSlice = createSlice({
+const servicesSlice = createSlice({
     name: 'services',
     initialState,
     reducers: {},
@@ -49,4 +49,4 @@ const buildingsSlice = createSlice({
     }
 });
 
-export default buildingsSlice.reducer;
+export default servicesSlice.reducer;

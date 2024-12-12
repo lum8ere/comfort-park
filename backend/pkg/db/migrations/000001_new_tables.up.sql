@@ -40,6 +40,29 @@ CREATE TABLE photos (
     id TEXT PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
     url TEXT NOT NULL, -- URL объекта MinIO
     building_id TEXT REFERENCES buildings(id) ON DELETE CASCADE,   -- ID дома (nullable, если не привязан к дому)
-    is_gallery BOOLEAN NOT NULL DEFAULT FALSE, -- Флаг для галереи
     created_at TIMESTAMP DEFAULT NOW()
 );
+
+CREATE TABLE projects (
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+    name TEXT, -- название
+    description TEXT NULL, -- описание
+    created_at TIMESTAMP DEFAULT NOW(), -- дата создания
+)
+
+CREATE TABLE project_photos (
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+    root_id TEXT REFERENCES projects(id) ON DELETE CASCADE,
+    url TEXT NOT NULL, -- URL объекта MinIO
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE project_reviews (
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+    root_id TEXT REFERENCES projects(id) ON DELETE CASCADE,
+    first_name TEXT,
+    Last_name TEXT,
+    comment TEXT,
+    photos []TEXT,
+    created_at TIMESTAMP DEFAULT NOW()
+)
