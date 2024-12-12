@@ -1,16 +1,14 @@
-// Header.scss
-
-@import 'variables'; // Импортируем переменные
+@import 'variables'; // Импортируем ваши переменные
 
 .header {
     z-index: 1000;
     box-shadow: $header-box-shadow;
     display: flex;
-    justify-content: center; // Центрируем контейнер внутри хедера
+    justify-content: center;
     align-items: center;
     padding: 0;
-    background-color: $header-background-color; // Устанавливаем фон хедера
-    height: $header-height; // Устанавливаем высоту хедера
+    background-color: $header-background-color;
+    height: $header-height;
 }
 
 .header__container {
@@ -18,9 +16,8 @@
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    max-width: 1920px; // Максимальная ширина хедера, можно настроить
-    padding-left: $header-horizontal-padding-left; // Отступ слева
-    // padding-right: $header-horizontal-padding-right; // Отступ справа
+    max-width: 1920px;
+    padding-left: $header-horizontal-padding-left;
     box-sizing: border-box;
 }
 
@@ -28,66 +25,105 @@
     display: flex;
     align-items: center;
     cursor: pointer;
-    font-size: $logo-font-size; // Размер текста логотипа
+    font-size: $logo-font-size;
     font-weight: bold;
-    color: $logo-color; // Цвет логотипа (белый)
+    color: $logo-color;
 }
 
 .header__center {
     display: flex;
-    justify-content: center; // Центрируем навигационные кнопки
+    justify-content: center;
     align-items: center;
-    flex-grow: 1; // Занимает доступное пространство между левой и правой частью
+    flex-grow: 1;
 }
 
 .header__center .ant-btn {
-    font-size: $nav-button-font-size; // Размер текста навигационных кнопок
-    color: $nav-button-color; // Цвет текста навигационных кнопок (белый)
-    padding: 0 16px; // Внутренние отступы кнопок
-    height: auto; // Автоматическая высота кнопок
-    border: none; // Убираем границу кнопок
+    font-size: $nav-button-font-size;
+    color: $nav-button-color;
+    padding: 0 16px;
+    height: auto;
+    border: none;
+    background: transparent;
 }
 
 .header__center .ant-btn:hover {
-    color: $nav-button-color; // Цвет текста при наведении
-    background: transparent; // Убедимся, что фон остается прозрачным
+    color: $nav-button-color !important;
+    background: transparent !important;
+    box-shadow: none !important;
 }
 
 .header__right {
     display: flex;
     align-items: center;
-    gap: 16px; // Отступ между элементами в правой части
-    padding-right: 0; // Убираем дополнительный отступ, если он был
+    gap: 16px;
+    padding-right: 0;
 }
 
 .header__phone {
-    font-size: $phone-font-size; // Размер текста номера телефона
-    color: $phone-color; // Цвет текста номера телефона (белый)
+    font-size: $phone-font-size;
+    color: $phone-color;
 }
 
 .header__separator {
-    font-size: $separator-font-size; // Размер текста палочки
-    color: $separator-color; // Цвет текста палочки (белый)
+    font-size: $separator-font-size;
+    color: $separator-color;
 }
 
 .header__right .ant-btn {
-    font-size: $call-button-font-size; // Размер текста кнопки "Заказать звонок"
-    padding: 8px 16px; // Внутренние отступы кнопки
-    height: $call-button-height; // Высота кнопки
-    background-color: transparent; // Убираем фон кнопки
-    color: $call-button-text-color; // Цвет текста кнопки "Заказать звонок" (белый)
-    border: none; // Убираем границу
-    border-radius: 4px; // Закругленные углы
-    transition: color 0.3s, background-color 0.3s; // Плавные переходы при наведении
-    cursor: pointer; // Указывающий курсор при наведении
+    font-size: $call-button-font-size;
+    padding: 8px 16px;
+    height: $call-button-height;
+    background-color: transparent;
+    color: $call-button-text-color;
+    border: none;
+    border-radius: 4px;
+    transition: color 0.3s, background-color 0.3s;
+    cursor: pointer;
 }
 
 .header__right .ant-btn:hover {
-    color: $call-button-hover-text-color; // Цвет текста кнопки при наведении
-    background-color: transparent; // Оставляем фон прозрачным
+    color: $call-button-hover-text-color !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
 }
 
-/* Дополнительные стили для адаптивности */
+.header__burger {
+    display: none;
+    font-size: 24px;
+    color: $logo-color;
+    cursor: pointer;
+}
+
+// Стили для Drawer
+.drawer__footer {
+    margin-top: 20px;
+    border-top: 1px solid #ddd;
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    .drawer__phone {
+        font-size: 16px;
+        color: #000; // Можно задать свой цвет или использовать переменные
+        text-align: center;
+    }
+
+    .drawer__call-button {
+        font-size: 16px;
+        background: transparent;
+        color: #000; 
+        border: none;
+        text-align: center;
+
+        &:hover {
+            color: #000 !important;
+            background: transparent !important;
+        }
+    }
+}
+
+// Адаптивность
 @media (max-width: 1200px) {
     .header__container {
         padding-left: 50px;
@@ -112,28 +148,19 @@
 }
 
 @media (max-width: 768px) {
-    .header__container {
-        flex-direction: column;
-        align-items: flex-start;
-        padding-left: 20px;
-        padding-right: 20px;
-        height: auto;
-    }
-
+    // Скрываем центральные кнопки
     .header__center {
-        width: 100%;
-        margin-top: 10px;
-        margin-bottom: 10px;
+        display: none;
     }
 
+    // Показываем бургер
+    .header__burger {
+        display: block;
+        margin-left: 16px;
+    }
+
+    // Скрываем телефон и кнопку в хедере на малых экранах
     .header__right {
-        width: 100%;
-        justify-content: flex-start;
-        gap: 8px;
-    }
-
-    .header__right .ant-btn {
-        width: 100%;
-        max-width: 200px;
+        display: none;
     }
 }
