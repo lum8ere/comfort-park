@@ -1,0 +1,148 @@
+/* ContactPage.scss */
+
+.contact-page {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    color: #333;
+    background-color: #f9f9f9; /* Фон для улучшения визуального восприятия */
+    border-radius: 8px; /* Закругленные углы для мягкого дизайна */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Тень для создания глубины */
+
+    &__title {
+        font-size: 28px; /* Увеличенный размер шрифта для заголовка */
+        margin-bottom: 25px;
+        border-bottom: 3px solid #ccc;
+        padding-bottom: 10px;
+        text-align: center; /* Центрирование заголовка */
+        color: #8e3131; /* Измененный цвет для лучшей читаемости */
+    }
+
+    &__info-block {
+        margin-bottom: 50px;
+
+        h2 {
+            font-size: 20px;
+            margin: 15px 0 8px;
+            color: #8e3131; /* Измененный цвет подзаголовков */
+        }
+
+        p {
+            margin: 0 0 20px;
+            font-size: 16px;
+            line-height: 1.5; /* Улучшенное межстрочное расстояние для читабельности */
+
+            a {
+                color: #0077cc;
+                text-decoration: none;
+                transition: color 0.3s ease;
+
+                &:hover {
+                    text-decoration: underline;
+                    color: #005fa3; /* Изменение цвета при наведении */
+                }
+            }
+        }
+    }
+
+    &__legal-info {
+        border-top: 3px solid #ccc;
+        padding-top: 25px;
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 25px;
+            text-align: center;
+            color: #8e3131;
+        }
+
+        .legal-info__grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* Два столбца одинаковой ширины */
+            grid-gap: 20px 40px; /* Вертикальные и горизонтальные отступы */
+            align-items: start;
+
+            /* Стили для каждой пары "название-значение" */
+            .legal-info__item {
+                display: flex;
+                flex-direction: column; /* Расположение элементов вертикально */
+                padding: 10px 0;
+
+                /* Добавление нижней границы для разделения элементов */
+                &:not(:last-child) {
+                    border-bottom: 1px solid #e0e0e0;
+                }
+
+                .legal-info__label {
+                    text-align: left; /* Выровнять текст по левому краю */
+                    padding-right: 0; /* Убрать правый отступ */
+                    color: #8e3131; /* Измененный цвет для лучшего выделения */
+                    font-weight: bold; /* Жирный шрифт */
+                    margin-bottom: 5px; /* Отступ снизу для разделения от значения */
+                }
+
+                .legal-info__value {
+                    text-align: left;
+                    color: #555;
+                }
+            }
+        }
+    }
+
+    /* Медиазапросы для адаптивности */
+    @media (max-width: 768px) {
+        max-width: 90%;
+        padding: 15px;
+
+        &__title {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        &__info-block {
+            h2 {
+                font-size: 18px;
+                margin: 12px 0 6px;
+            }
+
+            p {
+                font-size: 15px;
+                margin-bottom: 18px;
+            }
+        }
+
+        &__legal-info {
+            h1 {
+                font-size: 22px;
+                margin-bottom: 20px;
+            }
+
+            .legal-info__grid {
+                grid-template-columns: 1fr; /* Переход на один столбец на малых экранах */
+
+                .legal-info__item {
+                    flex-direction: column; /* Убедиться, что направление остается вертикальным */
+                }
+            }
+        }
+    }
+
+    @media (max-width: 480px) {
+        &__legal-info {
+            .legal-info__grid {
+                .legal-info__item {
+                    flex-direction: column; /* Все элементы занимают всю ширину */
+                    text-align: left;
+
+                    .legal-info__label {
+                        text-align: left;
+                        padding-right: 0;
+                        margin-bottom: 5px;
+                        background-color: transparent; /* Убираем фон на мобильных устройствах */
+                    }
+                }
+            }
+        }
+    }
+}
