@@ -10,6 +10,7 @@ import { selectProjectsOnPage } from 'store/slices/projects/projectSelectors';
 
 import './ProjectPage.scss';
 import { fetchProjects } from 'store/slices/projects/projectsSlice';
+import { ProjectCard } from 'components/card/project/ProjectCard';
 
 const { Title, Paragraph } = Typography;
 
@@ -20,13 +21,12 @@ export const ProjectPage = memo(() => {
     const projects = useSelector(selectProjectsOnPage);
     const { loading, error } = useSelector((state: RootState) => state.services);
 
-        // Загрузить данные при монтировании компонента
+    // Загрузить данные при монтировании компонента
     useEffect(() => {
         dispatch(fetchProjects());
     }, [dispatch]);
 
-    console.log(projects)
-
+    console.log("projects", projects);
 
     const reloadSerivce = () => {
         dispatch(fetchServices());
@@ -69,9 +69,16 @@ export const ProjectPage = memo(() => {
                         md={8} // на десктопах 3 карточки в ряд
                         style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
                     >
-                        {/* <ServiceCard imageURL={project.projectPhoto[0].url} name={project.name} /> */}
+                        <ProjectCard
+                            id={project.id}
+                            description={project.description}
+                            name={project.name}
+                            created_at={project.created_at}
+                            ProjectPhoto={project.ProjectPhoto}
+                            ProjectReview={project.ProjectReview}
+                        />
                     </Col>
-                ))} 
+                ))}
             </Row>
         </div>
     );

@@ -2,14 +2,16 @@ import { configureStore } from '@reduxjs/toolkit';
 import buildingsReducer from './slices/buildings/buildingsSlice';
 import buildingReducer from './slices/buildings/buildingItem';
 import servicesSlice from './slices/services/servicesSlice';
-import projectsSlice from './slices/projects/projectsSlice'; 
+import projectsSlice from './slices/projects/projectsSlice';
+import projectSlice from './slices/projects/projectSlice'; 
 
 export const store = configureStore({
   reducer: {
     buildings: buildingsReducer,
     building: buildingReducer,
     services: servicesSlice,
-    projects: projectsSlice
+    projects: projectsSlice,
+    project: projectSlice
   },
 });
 

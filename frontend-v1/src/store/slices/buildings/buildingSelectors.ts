@@ -17,8 +17,5 @@ export const selectCatalogBuildings = createSelector([selectBuildings], (buildin
 
 export const selectBuildingItem = createSelector([selectBuilding], (building) => {
     if (!building) return null;
-
-    console.log(building)
-
     return building;
 });

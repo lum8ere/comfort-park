@@ -15,10 +15,7 @@ const initialState: BuildingsState = {
 };
 
 export const fetchBuilding = createAsyncThunk('building/buildingsItem', async (id: string) => {
-    console.log("id: " + id);
     const response = await axiosInstance.get(`/buildings/${id}`);
-    console.log("response: ", response)
-    // console.log(response.data)
     return response.data;
 });
 

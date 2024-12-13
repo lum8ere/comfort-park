@@ -5,26 +5,26 @@ export interface ProjectPhoto {
     id: string;
     rootId: string;
     url: string;
-    createdAt: string;
+    created_at: string;
 }
 
 export interface ProjectReview {
     id: string;
     rootId: string;
-    firstName: string;
-    lastName: string;
+    first_name: string;
+    last_name: string;
     comment: string;
-    photos: string[];
-    createdAt: string;
+    photos: string;
+    created_at: string;
 }
 
 export interface Project {
     id: string;
     name: string;
     description: string;
-    createdAt: string;
-    projectPhoto: ProjectPhoto[];
-    projectReview: ProjectReview[];
+    created_at: string;
+    ProjectPhoto: ProjectPhoto[];
+    ProjectReview: ProjectReview[];
 };
 
 interface ProjectsState {
