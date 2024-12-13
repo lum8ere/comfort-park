@@ -28,9 +28,9 @@ export const CatalogPage = () => {
     };
 
     // Загрузить данные при монтировании компонента
-    useEffect(() => {
-        dispatch(fetchBuildings());
-    }, [dispatch]);
+    // useEffect(() => {
+    //     dispatch(fetchBuildings());
+    // }, [dispatch]);
 
     // Обработчик события прокрутки
     const handleScroll = () => {

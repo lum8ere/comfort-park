@@ -5,6 +5,7 @@ import { CatalogDetailPage } from 'pages/catalogDetailPage/CatalogDetailPage';
 import { ContactPage } from 'pages/contact-page/contactPage';
 import { OurWorksPage } from 'pages/gallery-page/OurWorksPage';
 import { HomePage } from 'pages/home-page/HomePage';
+import { ProjectPage } from 'pages/project-page/ProjectPage';
 import { ServicePage } from 'pages/service-page/ServicePage';
 import { RoutesType } from 'routing/routesTypes';
 
@@ -27,7 +28,7 @@ export const baseRoutes: RoutesType[] = [
     },
     {
         path: '/projects',
-        component: OurWorksPage
+        component: ProjectPage
     },
     {
         path: '/services',

@@ -25,7 +25,7 @@ type Building struct {
 	CreatedAt    time.Time `gorm:"column:created_at;default:now()" json:"created_at"`
 	IsActive     bool      `gorm:"column:is_active;not null;default:true" json:"is_active"`
 
-	// Ручные ассоциации
+	// Ручные ассоциации buildings
 	Photos        []Photo                		`gorm:"foreignKey:BuildingID"`
 	DictsBuildingCategory DictsBuildingCategory `gorm:"foreignKey:CategoryCode;references:Code"`
 	DictsMaterials        DictsMaterial        	`gorm:"foreignKey:MaterialCode;references:Code"`

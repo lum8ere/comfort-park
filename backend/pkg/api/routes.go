@@ -29,5 +29,7 @@ func InitRoutes(r *chi.Mux, db *gorm.DB, log *zap.Logger) {
 	r.Get("/buildings", middlewares.JSONResponseMiddleware(handlers.GetBuildingsHandler, appCtx))
 	r.Get("/buildings/{id}", middlewares.JSONResponseMiddleware(handlers.GetBuildingByIDHandler, appCtx))
 	r.Get("/services", middlewares.JSONResponseMiddleware(handlers.GetServiceHandler, appCtx))
+	r.Get("/projects", middlewares.JSONResponseMiddleware(handlers.GetProjectsHandler, appCtx))
+	r.Get("/projects/{id}", middlewares.JSONResponseMiddleware(handlers.GetProjectsByIDHandler, appCtx))
 	r.Post("/upload", middlewares.JSONResponseMiddleware(handlers.UploadPhotoHandler, appCtx))
 }

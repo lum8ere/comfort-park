@@ -18,8 +18,7 @@ type Photo struct {
 	IsGallery  bool      `gorm:"column:is_gallery;not null" json:"is_gallery"`
 	CreatedAt  time.Time `gorm:"column:created_at;default:now()" json:"created_at"`
 
-	// Ручная ассоциация
-    Building Building `gorm:"foreignKey:BuildingID"`
+	Building Building `gorm:"foreignKey:BuildingID"`
 }
 
 // TableName Photo's table name

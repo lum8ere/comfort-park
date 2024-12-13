@@ -21,6 +21,9 @@ var (
 	DictsBuildingCategory *dictsBuildingCategory
 	DictsMaterial         *dictsMaterial
 	Photo                 *photo
+	Project               *project
+	ProjectPhoto          *projectPhoto
+	ProjectReview         *projectReview
 	Service               *service
 )
 
@@ -30,6 +33,9 @@ func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 	DictsBuildingCategory = &Q.DictsBuildingCategory
 	DictsMaterial = &Q.DictsMaterial
 	Photo = &Q.Photo
+	Project = &Q.Project
+	ProjectPhoto = &Q.ProjectPhoto
+	ProjectReview = &Q.ProjectReview
 	Service = &Q.Service
 }
 
@@ -40,6 +46,9 @@ func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 		DictsBuildingCategory: newDictsBuildingCategory(db, opts...),
 		DictsMaterial:         newDictsMaterial(db, opts...),
 		Photo:                 newPhoto(db, opts...),
+		Project:               newProject(db, opts...),
+		ProjectPhoto:          newProjectPhoto(db, opts...),
+		ProjectReview:         newProjectReview(db, opts...),
 		Service:               newService(db, opts...),
 	}
 }
@@ -51,6 +60,9 @@ type Query struct {
 	DictsBuildingCategory dictsBuildingCategory
 	DictsMaterial         dictsMaterial
 	Photo                 photo
+	Project               project
+	ProjectPhoto          projectPhoto
+	ProjectReview         projectReview
 	Service               service
 }
 
@@ -63,6 +75,9 @@ func (q *Query) clone(db *gorm.DB) *Query {
 		DictsBuildingCategory: q.DictsBuildingCategory.clone(db),
 		DictsMaterial:         q.DictsMaterial.clone(db),
 		Photo:                 q.Photo.clone(db),
+		Project:               q.Project.clone(db),
+		ProjectPhoto:          q.ProjectPhoto.clone(db),
+		ProjectReview:         q.ProjectReview.clone(db),
 		Service:               q.Service.clone(db),
 	}
 }
@@ -82,6 +97,9 @@ func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 		DictsBuildingCategory: q.DictsBuildingCategory.replaceDB(db),
 		DictsMaterial:         q.DictsMaterial.replaceDB(db),
 		Photo:                 q.Photo.replaceDB(db),
+		Project:               q.Project.replaceDB(db),
+		ProjectPhoto:          q.ProjectPhoto.replaceDB(db),
+		ProjectReview:         q.ProjectReview.replaceDB(db),
 		Service:               q.Service.replaceDB(db),
 	}
 }
@@ -91,6 +109,9 @@ type queryCtx struct {
 	DictsBuildingCategory IDictsBuildingCategoryDo
 	DictsMaterial         IDictsMaterialDo
 	Photo                 IPhotoDo
+	Project               IProjectDo
+	ProjectPhoto          IProjectPhotoDo
+	ProjectReview         IProjectReviewDo
 	Service               IServiceDo
 }
 
@@ -100,6 +121,9 @@ func (q *Query) WithContext(ctx context.Context) *queryCtx {
 		DictsBuildingCategory: q.DictsBuildingCategory.WithContext(ctx),
 		DictsMaterial:         q.DictsMaterial.WithContext(ctx),
 		Photo:                 q.Photo.WithContext(ctx),
+		Project:               q.Project.WithContext(ctx),
+		ProjectPhoto:          q.ProjectPhoto.WithContext(ctx),
+		ProjectReview:         q.ProjectReview.WithContext(ctx),
 		Service:               q.Service.WithContext(ctx),
 	}
 }
