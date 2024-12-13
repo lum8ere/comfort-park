@@ -1,8 +1,10 @@
+// HomePage.scss
+
 .homepage {
     .hero {
         position: relative;
         width: 100%;
-        height: 969px; // Устанавливаем высоту блока
+        min-height: 969px; // Используем min-height вместо фиксированной высоты
         overflow: hidden;
 
         .hero-image {
@@ -10,8 +12,9 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 969px;
-            object-fit: cover; // Изображение заполняет блок, сохраняя пропорции
+            height: 100%;
+            object-fit: cover;
+            z-index: 1; // Убедитесь, что изображение находится позади контента
         }
 
         .hero-overlay {
@@ -20,19 +23,20 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5); // Полупрозрачный слой
+            background: rgba(0, 0, 0, 0.5);
             display: flex;
             flex-direction: column;
-            gap: 136px; // Устанавливаем фиксированный отступ между элементами
-            padding: 82px 96px 94px 96px; // Верхний, правый, нижний и левый отступы
-            box-sizing: border-box; // Учитываем паддинги в общую ширину
+            gap: 136px;
+            padding: 82px 96px 94px 96px;
+            box-sizing: border-box;
+            z-index: 2; // Поверх изображения
 
             .hero-content {
-                max-width: 1200px; // Ограничиваем ширину текста
-                color: #ffffff;
+                max-width: 1200px;
+                color: #ffffff; // Убедитесь, что цвет текста белый
 
                 .hero-title {
-                    font-size: 60px; // Увеличенный размер заголовка
+                    font-size: 60px;
                     font-weight: bold;
                     line-height: 1.2;
                     margin-bottom: 24px;
@@ -40,59 +44,117 @@
                 }
 
                 .hero-subtitle {
-                    font-size: 24px; // Увеличенный размер подзаголовка
+                    font-size: 24px;
                     line-height: 1.6;
                     margin-bottom: 32px;
-                    color: #ffffff;
-                    padding-left: 24px; // Отступ слева (табуляция)
+                    color: #ffffff; // Убедитесь, что цвет остаётся белым
+                    padding-left: 24px;
                 }
             }
 
             .hero-buttons {
                 display: flex;
-                justify-content: space-between; // Располагаем кнопки по разные стороны
-                align-items: center; // Центрируем кнопки по вертикали
-                width: 100%; // Кнопки занимают всю ширину контейнера
-                /* Удаляем gap: 24px; так как используем фиксированный gap */
-            }
-
-            // Общие стили для кнопок
-            .calculate-button,
-            .projects-button {
-                width: 580px; // Ширина кнопки
-                height: 155px; // Высота кнопки
-                font-size: 24px; // Размер текста
-                font-weight: bold;
-                border-radius: 8px; // Закругление углов
-                display: flex;
+                justify-content: space-between;
                 align-items: center;
-                justify-content: center;
-                text-align: center;
-                transition: background-color 0.3s, color 0.3s; // Плавные переходы при наведении
-                cursor: pointer; // Изменение курсора при наведении
-                box-sizing: border-box; // Учитываем паддинги и бордеры в размеры
-            }
+                width: 100%;
 
-            .calculate-button {
-                background-color: #8e3131;
-                color: #ffffff;
-                border: none;
-
-                &:hover {
-                    background-color: #a71818;
+                .calculate-button,
+                .projects-button {
+                    width: 580px;
+                    height: 155px;
+                    font-size: 24px;
+                    font-weight: bold;
+                    border-radius: 8px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    text-align: center;
+                    transition: background-color 0.3s, color 0.3s;
+                    cursor: pointer;
+                    box-sizing: border-box;
                 }
-            }
 
-            .projects-button {
-                background-color: #ffffff;
-                color: #8e3131;
-                border: 2px solid #8e3131;
-
-                &:hover {
-                    color: #ffffff;
+                .calculate-button {
                     background-color: #8e3131;
+                    color: #ffffff;
+                    border: none;
+
+                    &:hover {
+                        background-color: #a71818;
+                    }
+                }
+
+                .projects-button {
+                    background-color: #ffffff;
+                    color: #8e3131;
+                    border: 2px solid #8e3131;
+
+                    &:hover {
+                        color: #ffffff;
+                        background-color: #8e3131;
+                    }
                 }
             }
+        }
+    }
+
+    .services {
+        padding: 2rem 1rem;
+        width: 100%;
+        background-color: #f0f0f0; // Временный фон для отладки, удалить после
+    }
+
+    // Медиа-запросы для мобильных устройств
+    @media (max-width: 768px) {
+        .hero {
+            min-height: auto; // Позволяет блоку подстраиваться по содержимому
+            height: auto;
+
+            // .hero-image {
+            //     height: 50vh;
+            // }
+
+            .hero-overlay {
+                position: relative; // Изменили с absolute на relative для корректного позиционирования
+                flex-direction: column;
+                gap: 5vh;
+                padding: 5vh 5vw;
+
+                .hero-content {
+                    text-align: center;
+
+                    .hero-title {
+                        font-size: 2.5rem;
+                    }
+
+                    .hero-subtitle {
+                        font-size: 1rem;
+                        padding-left: 0;
+                        color: #ffffff; // Явно задаём белый цвет текста
+                    }
+                }
+
+                .hero-buttons {
+                    flex-direction: column;
+                    justify-content: center;
+
+                    .calculate-button,
+                    .projects-button {
+                        width: 100%;
+                        height: 3rem;
+                        font-size: 1rem;
+                        margin-bottom: 1rem;
+                    }
+
+                    .projects-button {
+                        margin-bottom: 0;
+                    }
+                }
+            }
+        }
+
+        .services {
+            padding: 1rem;
         }
     }
 }

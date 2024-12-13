@@ -13,7 +13,7 @@ export const Header = () => {
         { label: 'Наши проекты', path: '/projects' },
         { label: 'О нас', path: '/about' },
         { label: 'Услуги', path: '/services' },
-        { label: 'Контакты', path: '/contacts' },
+        { label: 'Контакты', path: '/contacts' }
     ];
 
     return (
@@ -21,7 +21,7 @@ export const Header = () => {
             <div className="header__container">
                 {/* Левая часть: Логотип */}
                 <div className="header__left" onClick={() => navigate('/')}>
-                    Логотип компании
+                    Парк-комфорт
                 </div>
 
                 {/* Центральная часть: Навигационные кнопки (на больших экранах) */}

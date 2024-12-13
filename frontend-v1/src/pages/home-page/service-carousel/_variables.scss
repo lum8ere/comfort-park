@@ -1,8 +1,8 @@
 // _variables.scss
 
 // Отступы
-$carousel-horizontal-padding: 96px; // Отступы слева и справа
-$carousel-vertical-padding: 40px;   // Отступы сверху и снизу
+$carousel-horizontal-padding: 96px; // Исходные отступы слева и справа
+$carousel-vertical-padding: 40px;   // Исходные отступы сверху и снизу
 
 // Размеры карточек услуг
 $service-card-width: 545px;
@@ -12,3 +12,9 @@ $service-card-height: 456px;
 $carousel-title-color: #8e3131;
 $carousel-title-font-size: 36px;
 $service-title-font-size: 24px;
+
+// Медиа-запросы для переменных (опционально, если требуется)
+@media (max-width: 768px) {
+    $carousel-title-font-size: 18px;
+    $service-title-font-size: 16px;
+}
