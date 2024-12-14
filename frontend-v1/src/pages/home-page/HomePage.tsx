@@ -1,15 +1,29 @@
-import { Button, Typography } from 'antd';
+import { Button, Modal, Typography } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import houseImage from 'assets/home-page-start.png';
 import './HomePage.scss';
 
 // Импортируем компонент ServicesCarousel
 import { ServicesCarousel } from './service-carousel/ServicesCarousel';
+import { useState } from 'react';
 
 const { Title, Paragraph } = Typography;
 
 export const HomePage = () => {
     const navigate = useNavigate();
+    const [open, setOpen] = useState(false);
+
+    const showModal = () => {
+        setOpen(true);
+    };
+
+    const handleOk = () => {
+        setOpen(false);
+    };
+
+    const handleCancel = () => {
+        setOpen(false);
+    };
 
     return (
         <div className="homepage">
@@ -30,10 +44,20 @@ export const HomePage = () => {
                         </Paragraph>
                     </div>
                     <div className="hero-buttons">
-                        <Button type="primary" size="large" className="calculate-button">
+                        <Button
+                            type="primary"
+                            size="large"
+                            className="calculate-button"
+                            onClick={() => showModal()}
+                        >
                             Рассчитать стоимость
                         </Button>
-                        <Button type="default" size="large" className="calculate-button" onClick={() => navigate('/catalog')}>
+                        <Button
+                            type="default"
+                            size="large"
+                            className="calculate-button"
+                            onClick={() => navigate('/catalog')}
+                        >
                             Посмотреть каталог
                         </Button>
                     </div>
@@ -44,6 +68,27 @@ export const HomePage = () => {
             <section className="services">
                 <ServicesCarousel />
             </section>
+
+            <Modal
+                open={open}
+                title="Ипотечный калькулятор"
+                onOk={handleOk}
+                onCancel={handleCancel}
+                footer={(_, { OkBtn }) => (
+                    <>
+                        <OkBtn />
+                    </>
+                )}
+                className="custom-modal"
+            >
+                <iframe
+                    id="calculator-iframe"
+                    src="https://ipoteka.domclick.ru/calc-reg/calculator.html"
+                    width="100%"
+                    height="600px" // Установите нужную высоту
+                    style={{ border: 'none' }} // Убираем рамку iframe
+                />
+            </Modal>
         </div>
     );
 };
