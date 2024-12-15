@@ -3,11 +3,14 @@ package handlers
 import (
 	"backed-api/pkg/context"
 	"backed-api/pkg/db/model"
-	"encoding/json"
+	"backed-api/pkg/db/storage"
+	"fmt"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/go-chi/chi"
+	"github.com/google/uuid"
 	"go.uber.org/zap"
 )
 
@@ -117,69 +120,117 @@ func GetBuildingByIDHandler(appCtx *context.AppContext, r *http.Request) (interf
 // CreateBuildingHandler обрабатывает создание нового здания
 // CreateBuildingRequest определяет структуру входящего JSON запроса для создания здания
 type CreateBuildingRequest struct {
-	Name         string   `json:"name" validate:"required"`
-	Size         string   `json:"size"`
-	Floors       int32    `json:"floors"`
-	Description  string   `json:"description"`
-	Area         float64  `json:"area"`
-	MaterialCode string   `json:"material_code"`
-	CategoryCode string   `json:"category_code"`
-	Price        int32    `json:"price"`
-	PhotoURLs    []string `json:"photo_urls"`
+	Name         string `json:"name" validate:"required"`
+	Size         string `json:"size"`
+	Floors       int32  `json:"floors"`
+	Description  string `json:"description"`
+	Area         string `json:"area"`
+	MaterialCode string `json:"material_code"`
+	CategoryCode string `json:"category_code"`
+	Price        string `json:"price"`
 }
 
 func CreateBuildingHandler(appCtx *context.AppContext, r *http.Request) (interface{}, error) {
 	appCtx.Logger.Info("Handling Create Building request")
 
-	var req CreateBuildingRequest
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		appCtx.Logger.Warn("Invalid request payload", zap.Error(err))
-		return map[string]string{"error": "Invalid request payload"}, nil
+	// Ограничение размера загружаемых файлов (например, 20MB)
+	const maxUploadSize = 20 << 20 // 20 MB
+	if err := r.ParseMultipartForm(maxUploadSize); err != nil {
+		appCtx.Logger.Warn("Ошибка парсинга формы", zap.Error(err))
+		return map[string]string{"error": "Invalid form data"}, nil
 	}
+
+	// Извлечение полей формы
+	name := r.FormValue("name")
+	if name == "" {
+		return map[string]string{"error": "Name is required"}, nil
+	}
+
+	size := r.FormValue("size")
+	description := r.FormValue("description")
+
+	areaStr := r.FormValue("area")
+	var area float64
+	if areaStr != "" {
+		var err error
+		area, err = strconv.ParseFloat(areaStr, 64)
+		if err != nil {
+			appCtx.Logger.Warn("Неверный формат area", zap.Error(err))
+			return map[string]string{"error": "Invalid area value"}, nil
+		}
+	}
+
+	// Парсинг поля price как int32
+	priceStr := r.FormValue("price")
+	var price int32
+	if priceStr != "" {
+		parsedPrice, err := strconv.ParseInt(priceStr, 10, 32)
+		if err != nil {
+			appCtx.Logger.Warn("Неверный формат price", zap.Error(err))
+			return map[string]string{"error": "Invalid price value"}, nil
+		}
+		price = int32(parsedPrice)
+	}
+
+	materialCode := r.FormValue("material_code")
+	categoryCode := r.FormValue("category_code")
 
 	// Создание нового объекта Building
 	newBuilding := model.Building{
-		Name:   req.Name,
-		Photos: []model.Photo{},
+		Name:         name,
+		Size:         size,
+		Description:  description,
+		Area:         area,
+		Price:        price,
+		MaterialCode: materialCode,
+		CategoryCode: categoryCode,
+		Photos:       []model.Photo{},
 	}
 
-	if req.Size != "" {
-		newBuilding.Size = req.Size
-	}
-
-	if req.Description != "" {
-		newBuilding.Description = req.Description
-	}
-
-	if req.Area != 0 {
-		newBuilding.Area = req.Area
-	}
-
-	if req.Price != 0 {
-		newBuilding.Price = req.Price
-	}
-
-	if req.MaterialCode != "" {
-		newBuilding.MaterialCode = req.MaterialCode
-	}
-
-	if req.CategoryCode != "" {
-		newBuilding.CategoryCode = req.CategoryCode
-	}
-
-	// Добавление фотографий, если они есть
-	for _, url := range req.PhotoURLs {
-		photo := model.Photo{
-			URL:        url,
-			BuildingID: newBuilding.ID,
-		}
-		newBuilding.Photos = append(newBuilding.Photos, photo)
-	}
-
-	// Сохранение в базе данных
-	if err := appCtx.DB.Save(&newBuilding).Error; err != nil {
+	// Сохранение здания в базе данных для получения ID
+	if err := appCtx.DB.Create(&newBuilding).Error; err != nil {
 		appCtx.Logger.Error("Failed to create building", zap.Error(err))
-		return nil, err
+		return nil, fmt.Errorf("failed to create building")
+	}
+
+	// Обработка загружаемых файлов
+	files := r.MultipartForm.File["photos"]
+	if len(files) > 0 {
+		for _, fileHeader := range files {
+			file, err := fileHeader.Open()
+			if err != nil {
+				appCtx.Logger.Warn("Ошибка открытия файла", zap.Error(err))
+				continue // Пропускаем файл и продолжаем обработку остальных
+			}
+			defer file.Close()
+
+			// Генерация уникального имени файла
+			objectName := uuid.New().String() + "_" + fileHeader.Filename
+
+			// Загрузка файла в MinIO
+			bucketName := "park-comfort" // Замените на ваше название бакета
+			fileURL, err := storage.UploadFile(bucketName, objectName, file, fileHeader.Size)
+			if err != nil {
+				appCtx.Logger.Error("Ошибка загрузки файла в бакет", zap.Error(err))
+				continue // Пропускаем файл и продолжаем обработку остальных
+			}
+
+			// Создание записи фотографии
+			photo := model.Photo{
+				URL:        fileURL,
+				BuildingID: newBuilding.ID,
+				IsGallery:  false, // Можно настроить логику для каждой фотографии отдельно, если нужно
+			}
+
+			// Добавление фотографии к зданию
+			newBuilding.Photos = append(newBuilding.Photos, photo)
+		}
+
+		// Сохранение фотографий в базе данных
+		if err := appCtx.DB.Save(&newBuilding).Error; err != nil {
+			appCtx.Logger.Error("Ошибка сохранения фотографий в базе данных", zap.Error(err))
+			return nil, fmt.Errorf("failed to save photos")
+		}
 	}
 
 	appCtx.Logger.Info("Successfully created new building", zap.String("id", newBuilding.ID))

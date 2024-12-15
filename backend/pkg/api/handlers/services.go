@@ -3,10 +3,12 @@ package handlers
 import (
 	"backed-api/pkg/context"
 	"backed-api/pkg/db/model"
-	"encoding/json"
+	"backed-api/pkg/db/storage"
 	"net/http"
+	"strconv"
 
 	"github.com/go-chi/chi"
+	"github.com/google/uuid"
 	"go.uber.org/zap"
 )
 
@@ -48,49 +50,89 @@ func GetServiceByIDHandler(appCtx *context.AppContext, r *http.Request) (interfa
 }
 
 // CreateServiceRequest определяет структуру входящего JSON запроса для создания сервиса
-type CreateServiceRequest struct {
-	Name        string  `json:"name" validate:"required"`
+type CreateServiceForm struct {
+	Name        string  `json:"name"`
 	Description string  `json:"description"`
-	Price       float64 `json:"price" validate:"required"`
-	ImageURL    string  `json:"image_url" validate:"required"`
-	IsActive    *bool   `json:"is_active"` // Указатель позволяет отличить отсутствие поля от значения false
+	Price       float64 `json:"price"`
+	IsActive    *bool   `json:"is_active"`
 }
 
 // CreateServiceHandler обрабатывает создание нового сервиса
 func CreateServiceHandler(appCtx *context.AppContext, r *http.Request) (interface{}, error) {
 	appCtx.Logger.Info("Handling Create Service request")
 
-	var req CreateServiceRequest
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		appCtx.Logger.Warn("Invalid request payload", zap.Error(err))
-		return map[string]string{"error": "Invalid request payload"}, nil
+	// Ограничение размера загружаемых файлов (например, 10MB)
+	const maxUploadSize = 10 << 20 // 10 MB
+	if err := r.ParseMultipartForm(maxUploadSize); err != nil {
+		appCtx.Logger.Warn("Ошибка парсинга формы", zap.Error(err))
+		return nil, nil
 	}
 
-	// Валидация обязательных полей
-	if req.Name == "" || req.Price == 0 || req.ImageURL == "" {
-		appCtx.Logger.Warn("Missing required fields in request")
-		return map[string]string{"error": "Missing required fields"}, nil
+	// Извлечение полей формы
+	name := r.FormValue("name")
+	if name == "" {
+		appCtx.Logger.Warn("Missing required field: name")
+		return nil, nil
 	}
 
-	// Установка значения по умолчанию для IsActive, если оно не указано
-	isActive := true
-	if req.IsActive != nil {
-		isActive = *req.IsActive
+	description := r.FormValue("description")
+
+	priceStr := r.FormValue("price")
+	if priceStr == "" {
+		appCtx.Logger.Warn("Missing required field: price")
+		return nil, nil
+	}
+
+	price, err := strconv.ParseFloat(priceStr, 64)
+	if err != nil {
+		appCtx.Logger.Warn("Invalid price format", zap.Error(err))
+		return nil, nil
+	}
+
+	isActive := true // Значение по умолчанию
+	isActiveStr := r.FormValue("is_active")
+	if isActiveStr != "" {
+		isActiveParsed, err := strconv.ParseBool(isActiveStr)
+		if err != nil {
+			appCtx.Logger.Warn("Invalid is_active format, defaulting to true", zap.Error(err))
+			// isActive остаётся true
+		} else {
+			isActive = isActiveParsed
+		}
+	}
+
+	// Извлечение файла изображения из формы
+	file, header, err := r.FormFile("image")
+	if err != nil {
+		appCtx.Logger.Warn("Error retrieving the file from form", zap.Error(err))
+		return nil, nil
+	}
+	defer file.Close()
+
+	// Генерация уникального имени файла
+	objectName := uuid.New().String() + "_" + header.Filename
+
+	// Загрузка файла в MinIO
+	bucketName := "park-comfort" // Замените на ваше название бакета
+	fileURL, err := storage.UploadFile(bucketName, objectName, file, header.Size)
+	if err != nil {
+		appCtx.Logger.Error("Error uploading file to bucket", zap.Error(err))
+		return nil, nil
 	}
 
 	// Создание нового объекта Service
 	newService := model.Service{
-		Name:        req.Name,
-		Description: req.Description,
-		Price:       req.Price,
-		ImageURL:    req.ImageURL,
+		Name:        name,
+		Description: description,
+		Price:       price,
+		ImageURL:    fileURL,
 		IsActive:    isActive,
 	}
 
 	// Сохранение в базе данных
 	if err := appCtx.DB.Create(&newService).Error; err != nil {
 		appCtx.Logger.Error("Failed to create service", zap.Error(err))
-		return nil, err
+		return nil, nil
 	}
 
 	appCtx.Logger.Info("Successfully created new service", zap.String("id", newService.ID))
