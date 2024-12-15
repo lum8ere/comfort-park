@@ -141,3 +141,95 @@ func CreateServiceHandler(appCtx *context.AppContext, r *http.Request) (interfac
 		"id":      newService.ID,
 	}, nil
 }
+
+func UpdateServiceHandler(appCtx *context.AppContext, r *http.Request) (interface{}, error) {
+	id := chi.URLParam(r, "id")
+	if id == "" {
+		appCtx.Logger.Warn("ID parameter is missing for update service")
+		return map[string]string{"error": "ID parameter is missing"}, nil
+	}
+
+	const maxUploadSize = 10 << 20 // 10MB
+	if err := r.ParseMultipartForm(maxUploadSize); err != nil {
+		appCtx.Logger.Warn("Error parsing form", zap.Error(err))
+		return map[string]string{"error": "Invalid form data"}, nil
+	}
+
+	// Найдём существующую услугу
+	var service model.Service
+	if err := appCtx.DB.Where("id = ?", id).First(&service).Error; err != nil {
+		appCtx.Logger.Warn("Service not found", zap.Error(err))
+		return map[string]string{"error": "Service not found"}, nil
+	}
+
+	// Обновим поля, если они переданы
+	if name := r.FormValue("name"); name != "" {
+		service.Name = name
+	}
+	if description := r.FormValue("description"); description != "" {
+		service.Description = description
+	}
+	if priceStr := r.FormValue("price"); priceStr != "" {
+		if price, err := strconv.ParseFloat(priceStr, 64); err == nil {
+			service.Price = price
+		} else {
+			appCtx.Logger.Warn("Invalid price format, skipping update", zap.Error(err))
+		}
+	}
+	if isActiveStr := r.FormValue("is_active"); isActiveStr != "" {
+		if active, err := strconv.ParseBool(isActiveStr); err == nil {
+			service.IsActive = active
+		} else {
+			appCtx.Logger.Warn("Invalid is_active format, skipping update", zap.Error(err))
+		}
+	}
+
+	// Проверим, передан ли новый файл image
+	file, header, err := r.FormFile("image")
+	if err == nil {
+		// Если файл передан, заменим существующую картинку
+		defer file.Close()
+		objectName := uuid.New().String() + "_" + header.Filename
+		bucketName := "park-comfort"
+		fileURL, err := storage.UploadFile(bucketName, objectName, file, header.Size)
+		if err != nil {
+			appCtx.Logger.Error("Error uploading service image", zap.Error(err))
+			return map[string]string{"error": "Failed to upload image"}, nil
+		}
+		service.ImageURL = fileURL
+	} else {
+		// err может быть ErrMissingFile, если image не был передан, это не ошибка — просто не обновляем
+		if err != http.ErrMissingFile {
+			appCtx.Logger.Warn("Error retrieving image file", zap.Error(err))
+		}
+	}
+
+	// Сохраняем изменения
+	if err := appCtx.DB.Save(&service).Error; err != nil {
+		appCtx.Logger.Error("Failed to update service", zap.Error(err))
+		return map[string]string{"error": "Failed to update service"}, nil
+	}
+
+	return map[string]string{"message": "Service updated successfully"}, nil
+}
+
+func DeleteServiceHandler(appCtx *context.AppContext, r *http.Request) (interface{}, error) {
+	id := chi.URLParam(r, "id")
+	if id == "" {
+		appCtx.Logger.Warn("ID parameter is missing for delete service")
+		return map[string]string{"error": "ID parameter is missing"}, nil
+	}
+
+	var service model.Service
+	if err := appCtx.DB.Where("id = ?", id).First(&service).Error; err != nil {
+		appCtx.Logger.Warn("Service not found", zap.Error(err))
+		return map[string]string{"error": "Service not found"}, nil
+	}
+
+	if err := appCtx.DB.Delete(&service).Error; err != nil {
+		appCtx.Logger.Error("Failed to delete service", zap.Error(err))
+		return map[string]string{"error": "Failed to delete service"}, nil
+	}
+
+	return map[string]string{"message": "Service deleted successfully"}, nil
+}

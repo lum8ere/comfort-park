@@ -301,3 +301,188 @@ func stringJoin(elems []string, sep string) string {
 func generateUUID() string {
 	return uuid.New().String()
 }
+
+func UpdateProjectHandler(appCtx *context.AppContext, r *http.Request) (interface{}, error) {
+	id := chi.URLParam(r, "id")
+	if id == "" {
+		return map[string]string{"error": "ID parameter is missing"}, nil
+	}
+
+	// Ограничение размера загружаемых файлов (например, 20MB)
+	const maxUploadSize = 20 << 20 // 20 MB
+	if err := r.ParseMultipartForm(maxUploadSize); err != nil {
+		appCtx.Logger.Warn("Ошибка парсинга формы", zap.Error(err))
+		return map[string]string{"error": "Invalid form data"}, nil
+	}
+
+	// Находим существующий проект
+	var project model.Project
+	if err := appCtx.DB.Where("id = ?", id).Preload("ProjectPhoto").Preload("ProjectReview").First(&project).Error; err != nil {
+		appCtx.Logger.Warn("Project not found", zap.Error(err))
+		return map[string]string{"error": "Project not found"}, nil
+	}
+
+	// Обновляем поля проекта
+	if name := r.FormValue("name"); name != "" {
+		project.Name = name
+	}
+	if desc := r.FormValue("description"); desc != "" {
+		project.Description = desc
+	}
+
+	// Старт транзакции
+	tx := appCtx.DB.Begin()
+	if tx.Error != nil {
+		appCtx.Logger.Error("Failed to start transaction", zap.Error(tx.Error))
+		return nil, tx.Error
+	}
+
+	// Сохраняем изменения проекта
+	if err := tx.Save(&project).Error; err != nil {
+		tx.Rollback()
+		appCtx.Logger.Error("Failed to update project", zap.Error(err))
+		return nil, fmt.Errorf("failed to update project")
+	}
+
+	// Обрабатываем новые фото проекта (если есть)
+	newPhotos, err := handleProjectPhotos(appCtx, r, project.ID)
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+
+	if len(newPhotos) > 0 {
+		project.ProjectPhoto = append(project.ProjectPhoto, newPhotos...)
+		if err := tx.Save(&project).Error; err != nil {
+			tx.Rollback()
+			appCtx.Logger.Error("Failed to save project photos", zap.Error(err))
+			return nil, fmt.Errorf("failed to save project photos")
+		}
+	}
+
+	// Обновление отзывов
+	// Логика: полностью заменить старые отзывы новыми.
+	// 1. Удаляем старые отзывы
+	if err := tx.Where("root_id = ?", project.ID).Delete(&model.ProjectReview{}).Error; err != nil {
+		tx.Rollback()
+		appCtx.Logger.Error("Failed to delete old reviews", zap.Error(err))
+		return nil, fmt.Errorf("failed to delete old reviews")
+	}
+
+	// 2. Снова создаём отзывы из JSON массива (аналогично CreateProjectHandler)
+	reviewsJSON := r.FormValue("reviews")
+	if reviewsJSON != "" {
+		var reviewRequests []CreateProjectReviewForm
+		if err := json.Unmarshal([]byte(reviewsJSON), &reviewRequests); err != nil {
+			tx.Rollback()
+			appCtx.Logger.Warn("Invalid reviews format", zap.Error(err))
+			return nil, fmt.Errorf("invalid reviews format")
+		}
+
+		reviews, err := recreateProjectReviews(appCtx, r, tx, project.ID, reviewRequests)
+		if err != nil {
+			tx.Rollback()
+			return nil, err
+		}
+
+		project.ProjectReview = reviews
+		if err := tx.Save(&project).Error; err != nil {
+			tx.Rollback()
+			appCtx.Logger.Error("Failed to save new project reviews", zap.Error(err))
+			return nil, fmt.Errorf("failed to save new project reviews")
+		}
+	}
+
+	if err := tx.Commit().Error; err != nil {
+		appCtx.Logger.Error("Failed to commit transaction", zap.Error(err))
+		return nil, err
+	}
+
+	return map[string]string{"message": "Project updated successfully"}, nil
+}
+
+// recreateProjectReviews — вспомогательная функция, аналог handleProjectReviews,
+// но используется при обновлении: мы предполагаем, что старые отзывы уже удалены.
+func recreateProjectReviews(
+	appCtx *context.AppContext,
+	r *http.Request,
+	tx *gorm.DB,
+	projectID string,
+	reviewRequests []CreateProjectReviewForm,
+) ([]model.ProjectReview, error) {
+	var reviews []model.ProjectReview
+
+	for idx, reviewReq := range reviewRequests {
+		// Проверяем необходимые поля
+		if reviewReq.FirstName == "" || reviewReq.LastName == "" || reviewReq.Comment == "" {
+			appCtx.Logger.Warn("Missing required fields in review")
+			return nil, fmt.Errorf("missing required fields in review")
+		}
+
+		review := model.ProjectReview{
+			ID:        uuid.New().String(),
+			RootID:    projectID,
+			FirstName: reviewReq.FirstName,
+			LastName:  reviewReq.LastName,
+			Comment:   reviewReq.Comment,
+			CreatedAt: time.Now(),
+		}
+
+		// Обработка фотографий для отзыва
+		reviewPhotosKey := fmt.Sprintf("review_photos_%d", idx)
+		reviewFiles := r.MultipartForm.File[reviewPhotosKey]
+		var photoURLs []string
+
+		if len(reviewFiles) > 0 {
+			for _, fileHeader := range reviewFiles {
+				file, err := fileHeader.Open()
+				if err != nil {
+					appCtx.Logger.Warn("Ошибка открытия файла отзыва", zap.Error(err))
+					continue
+				}
+				defer file.Close()
+
+				objectName := uuid.New().String() + "_" + fileHeader.Filename
+				bucketName := "park-comfort"
+				fileURL, err := storage.UploadFile(bucketName, objectName, file, fileHeader.Size)
+				if err != nil {
+					appCtx.Logger.Error("Ошибка загрузки файла отзыва", zap.Error(err))
+					continue
+				}
+				photoURLs = append(photoURLs, fileURL)
+			}
+		}
+
+		review.Photos = joinPhotos(photoURLs)
+
+		// Создаём новый отзыв
+		if err := tx.Create(&review).Error; err != nil {
+			appCtx.Logger.Error("Failed to create project review", zap.Error(err))
+			return nil, fmt.Errorf("failed to create project review")
+		}
+
+		reviews = append(reviews, review)
+	}
+
+	return reviews, nil
+}
+
+func DeleteProjectHandler(appCtx *context.AppContext, r *http.Request) (interface{}, error) {
+	id := chi.URLParam(r, "id")
+	if id == "" {
+		return map[string]string{"error": "ID parameter is missing"}, nil
+	}
+
+	var project model.Project
+	if err := appCtx.DB.Where("id = ?", id).First(&project).Error; err != nil {
+		appCtx.Logger.Warn("Project not found", zap.Error(err))
+		return map[string]string{"error": "Project not found"}, nil
+	}
+
+	if err := appCtx.DB.Delete(&project).Error; err != nil {
+		appCtx.Logger.Error("Failed to delete project", zap.Error(err))
+		return nil, fmt.Errorf("failed to delete project")
+	}
+
+	return map[string]string{"message": "Project deleted successfully"}, nil
+}

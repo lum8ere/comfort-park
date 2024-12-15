@@ -8,7 +8,8 @@ import {
     Button,
     Upload,
     notification,
-    Modal
+    Modal,
+    Popconfirm
 } from 'antd';
 import { UploadOutlined, PlusOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
@@ -25,6 +26,7 @@ const ProjectsManagement: React.FC = () => {
     const [reviews, setReviews] = useState<
         { first_name: string; last_name: string; comment: string; photos: any[] }[]
     >([]);
+    const [editingProject, setEditingProject] = useState<any>(null);
 
     useEffect(() => {
         dispatch(fetchProjects());
@@ -35,18 +37,64 @@ const ProjectsManagement: React.FC = () => {
         { title: 'Описание', dataIndex: 'description', key: 'description' },
         {
             title: 'Отзывы',
-            dataIndex: 'reviews',
-            key: 'reviews',
+            dataIndex: 'project_review',
+            key: 'project_review',
             render: (reviews: any[]) => reviews?.length || 0
+        },
+        {
+            title: 'Действия',
+            key: 'actions',
+            render: (_: any, record: any) => (
+                <div style={{ display: 'flex', gap: '8px' }}>
+                    <Button onClick={() => openEditModal(record)}>Редактировать</Button>
+                    <Popconfirm
+                        title="Удалить запись?"
+                        onConfirm={() => handleDelete(record.id)}
+                        okText="Да"
+                        cancelText="Нет"
+                    >
+                        <Button danger>Удалить</Button>
+                    </Popconfirm>
+                </div>
+            )
         }
     ];
+
+    const openEditModal = (project: any) => {
+        setEditingProject(project);
+        form.setFieldsValue({
+            name: project.name,
+            description: project.description,
+        });
+        // Отзывы загрузим, если хотите редактировать и отзывы. 
+        // Если нет логики обновления отзывов при редактировании - можно оставить пустым.
+        setReviews([]);
+        setIsModalVisible(true);
+    };
+
+    const openAddModal = () => {
+        setEditingProject(null);
+        form.resetFields();
+        setReviews([]);
+        setIsModalVisible(true);
+    };
+
+    const handleDelete = async (id: string) => {
+        try {
+            await axios.delete(`/prod/projects/${id}`);
+            notification.success({ message: 'Проект успешно удален' });
+            dispatch(fetchProjects());
+        } catch (error) {
+            notification.error({ message: 'Ошибка при удалении проекта' });
+        }
+    };
 
     const onAddReview = () => {
         setReviews([...reviews, { first_name: '', last_name: '', comment: '', photos: [] }]);
     };
 
     const onRemoveReview = (index: number) => {
-        const updatedReviews = reviews.slice();
+        const updatedReviews = [...reviews];
         updatedReviews.splice(index, 1);
         setReviews(updatedReviews);
     };
@@ -55,9 +103,9 @@ const ProjectsManagement: React.FC = () => {
         try {
             const formData = new FormData();
             formData.append('name', values.name);
-            formData.append('description', values.description);
+            formData.append('description', values.description || '');
 
-            // Добавление фотографий проекта
+            // Фотографии проекта
             if (values.photos && values.photos.length > 0) {
                 values.photos.forEach((file: any) => {
                     formData.append('photos', file.originFileObj);
@@ -79,26 +127,37 @@ const ProjectsManagement: React.FC = () => {
                 });
             });
 
-            await axios.post('/prod/projects', formData, {
-                headers: { 'Content-Type': 'multipart/form-data' }
-            });
-            notification.success({ message: 'Проект успешно добавлен' });
+            if (editingProject) {
+                // Редактирование
+                await axios.put(`/prod/projects/${editingProject.id}`, formData, {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                });
+                notification.success({ message: 'Проект успешно обновлен' });
+            } else {
+                // Добавление
+                await axios.post('/prod/projects', formData, {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                });
+                notification.success({ message: 'Проект успешно добавлен' });
+            }
+
             form.resetFields();
             setReviews([]);
             setIsModalVisible(false);
+            dispatch(fetchProjects());
         } catch (error) {
-            notification.error({ message: 'Ошибка при добавлении проекта' });
+            notification.error({ message: 'Ошибка при сохранении проекта' });
         }
     };
 
     return (
         <div>
             <h2>Управление проектами</h2>
-            <Button type="primary" onClick={() => setIsModalVisible(true)}>Добавить проект</Button>
+            <Button type="primary" onClick={openAddModal}>Добавить проект</Button>
             <Table columns={columns} dataSource={projects} rowKey="id" style={{ marginTop: 16 }} />
 
             <Modal
-                title="Добавить проект"
+                title={editingProject ? "Редактировать проект" : "Добавить проект"}
                 visible={isModalVisible}
                 onCancel={() => setIsModalVisible(false)}
                 footer={null}

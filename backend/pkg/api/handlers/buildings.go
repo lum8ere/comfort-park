@@ -236,3 +236,121 @@ func CreateBuildingHandler(appCtx *context.AppContext, r *http.Request) (interfa
 	appCtx.Logger.Info("Successfully created new building", zap.String("id", newBuilding.ID))
 	return map[string]string{"message": "Building created successfully", "id": newBuilding.ID}, nil
 }
+
+func UpdateBuildingHandler(appCtx *context.AppContext, r *http.Request) (interface{}, error) {
+	id := chi.URLParam(r, "id")
+	if id == "" {
+		return map[string]string{"error": "ID parameter is missing"}, nil
+	}
+
+	// Ограничение размера загружаемых файлов (например, 20MB)
+	const maxUploadSize = 20 << 20 // 20 MB
+	if err := r.ParseMultipartForm(maxUploadSize); err != nil {
+		appCtx.Logger.Warn("Ошибка парсинга формы", zap.Error(err))
+		return map[string]string{"error": "Invalid form data"}, nil
+	}
+
+	// Находим существующее здание
+	var building model.Building
+	if err := appCtx.DB.Where("id = ?", id).Preload("Photos").First(&building).Error; err != nil {
+		appCtx.Logger.Warn("Building not found", zap.Error(err))
+		return map[string]string{"error": "Building not found"}, nil
+	}
+
+	// Обновляем поля
+	if name := r.FormValue("name"); name != "" {
+		building.Name = name
+	}
+	if size := r.FormValue("size"); size != "" {
+		building.Size = size
+	}
+	if floorsStr := r.FormValue("floors"); floorsStr != "" {
+		parsedFloors, err := strconv.ParseInt(floorsStr, 10, 32)
+		if err == nil {
+			building.Floors = int32(parsedFloors)
+		}
+	}
+	if areaStr := r.FormValue("area"); areaStr != "" {
+		area, err := strconv.ParseFloat(areaStr, 64)
+		if err == nil {
+			building.Area = area
+		}
+	}
+	if desc := r.FormValue("description"); desc != "" {
+		building.Description = desc
+	}
+	if priceStr := r.FormValue("price"); priceStr != "" {
+		parsedPrice, err := strconv.ParseInt(priceStr, 10, 32)
+		if err == nil {
+			building.Price = int32(parsedPrice)
+		}
+	}
+	if isActiveStr := r.FormValue("is_active"); isActiveStr != "" {
+		building.IsActive = (isActiveStr == "true")
+	}
+
+	// Обновим существующую запись в БД
+	if err := appCtx.DB.Save(&building).Error; err != nil {
+		appCtx.Logger.Error("Failed to update building", zap.Error(err))
+		return nil, fmt.Errorf("failed to update building")
+	}
+
+	// Если есть новые файлы, то можно добавить их тоже
+	files := r.MultipartForm.File["photos"]
+	if len(files) > 0 {
+		for _, fileHeader := range files {
+			file, err := fileHeader.Open()
+			if err != nil {
+				appCtx.Logger.Warn("Ошибка открытия файла", zap.Error(err))
+				continue
+			}
+			defer file.Close()
+
+			objectName := uuid.New().String() + "_" + fileHeader.Filename
+
+			bucketName := "park-comfort"
+			fileURL, err := storage.UploadFile(bucketName, objectName, file, fileHeader.Size)
+			if err != nil {
+				appCtx.Logger.Error("Ошибка загрузки файла", zap.Error(err))
+				continue
+			}
+
+			photo := model.Photo{
+				URL:        fileURL,
+				BuildingID: building.ID,
+				IsGallery:  false,
+			}
+
+			// Добавим фото к зданию
+			building.Photos = append(building.Photos, photo)
+		}
+
+		// Сохраняем изменения (новые фото)
+		if err := appCtx.DB.Save(&building).Error; err != nil {
+			appCtx.Logger.Error("Failed to save building photos", zap.Error(err))
+			return nil, fmt.Errorf("failed to save building photos")
+		}
+	}
+
+	return map[string]string{"message": "Building updated successfully"}, nil
+}
+
+func DeleteBuildingHandler(appCtx *context.AppContext, r *http.Request) (interface{}, error) {
+	id := chi.URLParam(r, "id")
+	if id == "" {
+		return map[string]string{"error": "ID parameter is missing"}, nil
+	}
+
+	var building model.Building
+	if err := appCtx.DB.Where("id = ?", id).First(&building).Error; err != nil {
+		appCtx.Logger.Warn("Building not found", zap.Error(err))
+		return map[string]string{"error": "Building not found"}, nil
+	}
+
+	if err := appCtx.DB.Delete(&building).Error; err != nil {
+		appCtx.Logger.Error("Failed to delete building", zap.Error(err))
+		return nil, fmt.Errorf("failed to delete building")
+	}
+
+	return map[string]string{"message": "Building deleted successfully"}, nil
+}
