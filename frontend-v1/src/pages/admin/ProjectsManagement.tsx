@@ -1,27 +1,19 @@
 // src/pages/admin/ProjectsManagement.tsx
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Table, Form, Input, Button, Upload, notification, Modal, Popconfirm } from 'antd';
 import { UploadOutlined, PlusOutlined } from '@ant-design/icons';
-import { useSelector } from 'react-redux';
-import { useAppDispatch } from 'store/hooks';
-import { selectProjects } from 'store/slices/projects/projectSelectors';
+import { useProjectsData } from 'store/hooks';
 import axios from '../../service/axiosConfig';
-import { fetchProjects } from 'store/slices/projects/projectsSlice';
 
 const ProjectsManagement: React.FC = () => {
-    const dispatch = useAppDispatch();
-    const projects = useSelector(selectProjects);
+    const { projects, refetch } = useProjectsData() 
     const [form] = Form.useForm();
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [reviews, setReviews] = useState<
         { first_name: string; last_name: string; comment: string; photos: any[] }[]
     >([]);
     const [editingProject, setEditingProject] = useState<any>(null);
-
-    useEffect(() => {
-        dispatch(fetchProjects());
-    }, [dispatch]);
 
     const columns = [
         {
@@ -80,7 +72,7 @@ const ProjectsManagement: React.FC = () => {
         try {
             await axios.delete(`/prod/projects/${id}`);
             notification.success({ message: 'Проект успешно удален' });
-            dispatch(fetchProjects());
+            refetch();
         } catch (error) {
             notification.error({ message: 'Ошибка при удалении проекта' });
         }
@@ -141,7 +133,7 @@ const ProjectsManagement: React.FC = () => {
             form.resetFields();
             setReviews([]);
             setIsModalVisible(false);
-            dispatch(fetchProjects());
+            refetch();
         } catch (error) {
             notification.error({ message: 'Ошибка при сохранении проекта' });
         }
@@ -164,7 +156,7 @@ const ProjectsManagement: React.FC = () => {
 
             <Modal
                 title={editingProject ? 'Редактировать проект' : 'Добавить проект'}
-                visible={isModalVisible}
+                open={isModalVisible}
                 onCancel={() => setIsModalVisible(false)}
                 footer={null}
                 width={600}

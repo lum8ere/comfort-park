@@ -1,6 +1,6 @@
 // BuildingsManagement.tsx (дополнение)
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
     Table,
     Form,
@@ -15,25 +15,15 @@ import {
     Spin
 } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
-import { useSelector } from 'react-redux'; // Предполагаем, что у нас есть такой экшен
-import { RootState } from 'store';
-import { fetchBuildings } from 'store/slices/buildings/buildingsSlice';
-import { selectBuildings } from 'store/slices/buildings/buildingSelectors';
-import { useAppDispatch } from 'store/hooks';
+import { useBuildingsData } from 'store/hooks';
 import axios from '../../service/axiosConfig';
 
 const BuildingsManagement: React.FC = () => {
-    const dispatch = useAppDispatch();
-    const buildings = useSelector(selectBuildings);
-    const { loading, error } = useSelector((state: RootState) => state.buildings);
-
-    const [form] = Form.useForm();
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [editingBuilding, setEditingBuilding] = useState<any>(null); // объект текущего редактируемого здания
 
-    useEffect(() => {
-        dispatch(fetchBuildings());
-    }, [dispatch]);
+    const { buildings, refetch } = useBuildingsData();
+    const [form] = Form.useForm();
 
     const columns = [
         {
@@ -105,7 +95,7 @@ const BuildingsManagement: React.FC = () => {
         try {
             await axios.delete(`/prod/buildings/${id}`);
             notification.success({ message: 'Запись успешно удалена' });
-            dispatch(fetchBuildings());
+            refetch();
         } catch (error) {
             notification.error({ message: 'Ошибка при удалении' });
         }
@@ -144,7 +134,7 @@ const BuildingsManagement: React.FC = () => {
 
             form.resetFields();
             setIsModalVisible(false);
-            dispatch(fetchBuildings());
+            refetch();
         } catch (error) {
             notification.error({ message: 'Ошибка при сохранении здания' });
         }
@@ -165,10 +155,9 @@ const BuildingsManagement: React.FC = () => {
                 size="small"
                 scroll={{ x: true }}
             />
-
             <Modal
                 title={editingBuilding ? 'Редактировать здание' : 'Добавить здание'}
-                visible={isModalVisible}
+                open={isModalVisible}
                 onCancel={() => setIsModalVisible(false)}
                 footer={null}
             >

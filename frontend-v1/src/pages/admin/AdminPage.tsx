@@ -1,5 +1,3 @@
-// src/pages/admin/AdminPage.tsx
-
 import React, { useState } from 'react';
 import { Menu, Layout, Grid, Drawer } from 'antd';
 import './AdminPage.scss';
@@ -29,6 +27,21 @@ const AdminPage: React.FC = () => {
         }
     };
 
+    const menuItems = [
+        {
+            key: 'buildings',
+            label: 'Управление зданиями',
+        },
+        {
+            key: 'projects',
+            label: 'Управление проектами',
+        },
+        {
+            key: 'services',
+            label: 'Управление услугами',
+        },
+    ];
+
     const menu = (
         <Menu
             mode="inline"
@@ -36,11 +49,8 @@ const AdminPage: React.FC = () => {
             onClick={({ key }) =>
                 setActiveSection(key as 'buildings' | 'projects' | 'services')
             }
-        >
-            <Menu.Item key="buildings">Управление зданиями</Menu.Item>
-            <Menu.Item key="projects">Управление проектами</Menu.Item>
-            <Menu.Item key="services">Управление услугами</Menu.Item>
-        </Menu>
+            items={menuItems}
+        />
     );
 
     // Для мобильных устройств используем Drawer вместо Sider
@@ -55,10 +65,9 @@ const AdminPage: React.FC = () => {
                         <h1 style={{ marginLeft: 16 }}>Админ-панель</h1>
                     </Header>
                     <Drawer
-                        visible={mobileMenuVisible}
+                        open={mobileMenuVisible} // Заменили 'visible' на 'open'
                         onClose={() => setMobileMenuVisible(false)}
                         placement="left"
-                        bodyStyle={{ padding: 0 }}
                     >
                         {menu}
                     </Drawer>

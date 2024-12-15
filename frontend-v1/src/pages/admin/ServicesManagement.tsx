@@ -15,21 +15,16 @@ import {
 } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { useAppDispatch } from 'store/hooks';
+import { useAppDispatch, useServicesData } from 'store/hooks';
 import { selectServices } from 'store/slices/services/serviceSelectors';
 import axios from '../../service/axiosConfig';
 import { fetchServices } from 'store/slices/services/servicesSlice';
 
 const ServicesManagement: React.FC = () => {
-    const dispatch = useAppDispatch();
-    const services = useSelector(selectServices);
+    const { services, refetch } = useServicesData();
     const [form] = Form.useForm();
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [editingService, setEditingService] = useState<any>(null);
-
-    useEffect(() => {
-        dispatch(fetchServices());
-    }, [dispatch]);
 
     const columns = [
         {
@@ -94,7 +89,7 @@ const ServicesManagement: React.FC = () => {
         try {
             await axios.delete(`/prod/services/${id}`);
             notification.success({ message: 'Услуга успешно удалена' });
-            dispatch(fetchServices());
+            refetch();
         } catch (error) {
             notification.error({ message: 'Ошибка при удалении' });
         }
@@ -128,7 +123,7 @@ const ServicesManagement: React.FC = () => {
 
             form.resetFields();
             setIsModalVisible(false);
-            dispatch(fetchServices());
+            refetch();
         } catch (error) {
             notification.error({ message: 'Ошибка при сохранении услуги' });
         }
@@ -151,7 +146,7 @@ const ServicesManagement: React.FC = () => {
 
             <Modal
                 title={editingService ? 'Редактировать услугу' : 'Добавить услугу'}
-                visible={isModalVisible}
+                open={isModalVisible}
                 onCancel={() => setIsModalVisible(false)}
                 footer={null}
             >
