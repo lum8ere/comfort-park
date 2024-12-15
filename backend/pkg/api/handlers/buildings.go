@@ -19,7 +19,7 @@ func GetBuildingsHandler(appCtx *context.AppContext, r *http.Request) (interface
 
 	// Получаем данные из базы данных
 	var buildings []model.Building
-	if err := appCtx.DB.Preload("Photos").Preload("DictsBuildingCategory").Preload("DictsMaterials").Find(&buildings).Error; err != nil {
+	if err := appCtx.DB.Preload("Photos").Find(&buildings).Error; err != nil {
 		appCtx.Logger.Error("Failed to fetch buildings", zap.Error(err))
 		return nil, err
 	}
@@ -49,8 +49,6 @@ func GetBuildingsHandler(appCtx *context.AppContext, r *http.Request) (interface
 			Size:      b.Size,
 			Floors:    b.Floors,
 			Area:      b.Area,
-			Material:  b.DictsMaterials.Name,
-			Category:  b.DictsBuildingCategory.Name,
 			Price:     b.Price,
 			Photos:    photos,
 			CreatedAt: b.CreatedAt,
@@ -75,7 +73,7 @@ func GetBuildingByIDHandler(appCtx *context.AppContext, r *http.Request) (interf
 
 	// Получаем данные из базы данных
 	var building model.Building
-	if err := appCtx.DB.Preload("Photos").Preload("DictsBuildingCategory").Preload("DictsMaterials").Where("id = ?", id).Find(&building).Error; err != nil {
+	if err := appCtx.DB.Preload("Photos").Where("id = ?", id).Find(&building).Error; err != nil {
 		appCtx.Logger.Error("Failed to fetch building", zap.Error(err))
 		return nil, err
 	}
@@ -105,8 +103,6 @@ func GetBuildingByIDHandler(appCtx *context.AppContext, r *http.Request) (interf
 		Size:        building.Size,
 		Floors:      building.Floors,
 		Area:        building.Area,
-		Material:    building.DictsMaterials.Name,
-		Category:    building.DictsBuildingCategory.Name,
 		Description: building.Description,
 		Price:       building.Price,
 		Photos:      photos,
@@ -120,14 +116,12 @@ func GetBuildingByIDHandler(appCtx *context.AppContext, r *http.Request) (interf
 // CreateBuildingHandler обрабатывает создание нового здания
 // CreateBuildingRequest определяет структуру входящего JSON запроса для создания здания
 type CreateBuildingRequest struct {
-	Name         string `json:"name" validate:"required"`
-	Size         string `json:"size"`
-	Floors       int32  `json:"floors"`
-	Description  string `json:"description"`
-	Area         string `json:"area"`
-	MaterialCode string `json:"material_code"`
-	CategoryCode string `json:"category_code"`
-	Price        string `json:"price"`
+	Name        string `json:"name" validate:"required"`
+	Size        string `json:"size"`
+	Floors      int32  `json:"floors"`
+	Description string `json:"description"`
+	Area        string `json:"area"`
+	Price       string `json:"price"`
 }
 
 func CreateBuildingHandler(appCtx *context.AppContext, r *http.Request) (interface{}, error) {
@@ -147,6 +141,16 @@ func CreateBuildingHandler(appCtx *context.AppContext, r *http.Request) (interfa
 	}
 
 	size := r.FormValue("size")
+	floorsStr := r.FormValue("floors")
+	var floors int32
+	if floorsStr != "" {
+		parsedFloors, err := strconv.ParseInt(floorsStr, 10, 32)
+		if err != nil {
+			appCtx.Logger.Warn("Неверный формат price", zap.Error(err))
+			return map[string]string{"error": "Invalid price value"}, nil
+		}
+		floors = int32(parsedFloors)
+	}
 	description := r.FormValue("description")
 
 	areaStr := r.FormValue("area")
@@ -172,19 +176,15 @@ func CreateBuildingHandler(appCtx *context.AppContext, r *http.Request) (interfa
 		price = int32(parsedPrice)
 	}
 
-	materialCode := r.FormValue("material_code")
-	categoryCode := r.FormValue("category_code")
-
 	// Создание нового объекта Building
 	newBuilding := model.Building{
-		Name:         name,
-		Size:         size,
-		Description:  description,
-		Area:         area,
-		Price:        price,
-		MaterialCode: materialCode,
-		CategoryCode: categoryCode,
-		Photos:       []model.Photo{},
+		Name:        name,
+		Size:        size,
+		Description: description,
+		Area:        area,
+		Floors:      floors,
+		Price:       price,
+		Photos:      []model.Photo{},
 	}
 
 	// Сохранение здания в базе данных для получения ID

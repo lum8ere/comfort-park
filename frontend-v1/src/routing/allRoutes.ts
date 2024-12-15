@@ -1,9 +1,9 @@
 import { NotFoundPage } from 'components/notFound/notFound';
 import { AboutPage } from 'pages/about-pages/AboutPage';
+import AdminPage from 'pages/admin/AdminPage';
 import { CatalogPage } from 'pages/catalog/CatalogPage';
 import { CatalogDetailPage } from 'pages/catalogDetailPage/CatalogDetailPage';
 import { ContactPage } from 'pages/contact-page/contactPage';
-import { OurWorksPage } from 'pages/gallery-page/OurWorksPage';
 import { HomePage } from 'pages/home-page/HomePage';
 import { ProjectDetailPage } from 'pages/project-page/detailPage/ProjectDetailPage';
 import { ProjectPage } from 'pages/project-page/ProjectPage';
@@ -42,5 +42,9 @@ export const baseRoutes: RoutesType[] = [
     {
         path: '/contacts',
         component: ContactPage
+    },
+    {
+        path: '/admin',
+        component: AdminPage
     }
 ];

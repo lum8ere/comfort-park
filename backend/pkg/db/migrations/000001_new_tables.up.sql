@@ -23,8 +23,6 @@ CREATE TABLE dicts_building_category (
 
 CREATE TABLE buildings (
     id TEXT PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-    category_code TEXT REFERENCES dicts_building_category(code) ON DELETE CASCADE, -- категория дома
-    material_code TEXT REFERENCES dicts_materials(code) ON DELETE CASCADE, -- материал дома
     name TEXT, -- название
     size TEXT, -- размер 6х5
     floors INT NOT NULL DEFAULT 1, -- количество этажей
