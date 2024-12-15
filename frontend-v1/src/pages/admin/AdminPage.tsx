@@ -5,6 +5,11 @@ import BuildingsManagement from './BuildingsManagement';
 import ProjectsManagement from './ProjectsManagement';
 import ServicesManagement from './ServicesManagement';
 import { MenuOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { RootState } from 'store';
+import { useAppDispatch } from 'store/hooks';
+import { logout } from 'store/slices/auth/authSlice';
 
 const { Sider, Content, Header } = Layout;
 const { useBreakpoint } = Grid;
@@ -12,6 +17,9 @@ const { useBreakpoint } = Grid;
 const AdminPage: React.FC = () => {
     const [activeSection, setActiveSection] = useState<'buildings' | 'projects' | 'services'>('buildings');
     const [mobileMenuVisible, setMobileMenuVisible] = useState(false);
+    const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+    const auth = useSelector((state: RootState) => state.auth);
     const screens = useBreakpoint();
 
     const renderSection = () => {
@@ -25,6 +33,11 @@ const AdminPage: React.FC = () => {
             default:
                 return <div>Выберите раздел для управления</div>;
         }
+    };
+
+    const handleLogout = () => {
+        dispatch(logout());
+        navigate('/login');
     };
 
     const menuItems = [
@@ -63,6 +76,7 @@ const AdminPage: React.FC = () => {
                     <Header style={{ background: '#fff', padding: '0 16px', display: 'flex', alignItems: 'center' }}>
                         <MenuOutlined onClick={() => setMobileMenuVisible(true)} />
                         <h1 style={{ marginLeft: 16 }}>Админ-панель</h1>
+                        <span onClick={handleLogout} style={{ cursor: 'pointer' }}>Выйти</span>
                     </Header>
                     <Drawer
                         open={mobileMenuVisible} // Заменили 'visible' на 'open'

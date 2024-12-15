@@ -16,69 +16,64 @@ import (
 )
 
 var (
-	Q                     = new(Query)
-	Building              *building
-	DictsBuildingCategory *dictsBuildingCategory
-	DictsMaterial         *dictsMaterial
-	Photo                 *photo
-	Project               *project
-	ProjectPhoto          *projectPhoto
-	ProjectReview         *projectReview
-	Service               *service
+	Q             = new(Query)
+	Building      *building
+	Photo         *photo
+	Project       *project
+	ProjectPhoto  *projectPhoto
+	ProjectReview *projectReview
+	Service       *service
+	User          *user
 )
 
 func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 	*Q = *Use(db, opts...)
 	Building = &Q.Building
-	DictsBuildingCategory = &Q.DictsBuildingCategory
-	DictsMaterial = &Q.DictsMaterial
 	Photo = &Q.Photo
 	Project = &Q.Project
 	ProjectPhoto = &Q.ProjectPhoto
 	ProjectReview = &Q.ProjectReview
 	Service = &Q.Service
+	User = &Q.User
 }
 
 func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 	return &Query{
-		db:                    db,
-		Building:              newBuilding(db, opts...),
-		DictsBuildingCategory: newDictsBuildingCategory(db, opts...),
-		DictsMaterial:         newDictsMaterial(db, opts...),
-		Photo:                 newPhoto(db, opts...),
-		Project:               newProject(db, opts...),
-		ProjectPhoto:          newProjectPhoto(db, opts...),
-		ProjectReview:         newProjectReview(db, opts...),
-		Service:               newService(db, opts...),
+		db:            db,
+		Building:      newBuilding(db, opts...),
+		Photo:         newPhoto(db, opts...),
+		Project:       newProject(db, opts...),
+		ProjectPhoto:  newProjectPhoto(db, opts...),
+		ProjectReview: newProjectReview(db, opts...),
+		Service:       newService(db, opts...),
+		User:          newUser(db, opts...),
 	}
 }
 
 type Query struct {
 	db *gorm.DB
 
-	Building              building
-	DictsBuildingCategory dictsBuildingCategory
-	DictsMaterial         dictsMaterial
-	Photo                 photo
-	Project               project
-	ProjectPhoto          projectPhoto
-	ProjectReview         projectReview
-	Service               service
+	Building      building
+	Photo         photo
+	Project       project
+	ProjectPhoto  projectPhoto
+	ProjectReview projectReview
+	Service       service
+	User          user
 }
 
 func (q *Query) Available() bool { return q.db != nil }
 
 func (q *Query) clone(db *gorm.DB) *Query {
 	return &Query{
-		db:                    db,
-		Building:              q.Building.clone(db),
-		DictsBuildingCategory: q.DictsBuildingCategory.clone(db),
-		DictsMaterial:         q.DictsMaterial.clone(db),
-		Photo:                 q.Photo.clone(db),
-		Project:               q.Project.clone(db),
-		ProjectPhoto:          q.ProjectPhoto.clone(db),
-		ProjectReview:         q.ProjectReview.clone(db),
-		Service:               q.Service.clone(db),
+		db:            db,
+		Building:      q.Building.clone(db),
+		Photo:         q.Photo.clone(db),
+		Project:       q.Project.clone(db),
+		ProjectPhoto:  q.ProjectPhoto.clone(db),
+		ProjectReview: q.ProjectReview.clone(db),
+		Service:       q.Service.clone(db),
+		User:          q.User.clone(db),
 	}
 }
 
@@ -92,39 +87,36 @@ func (q *Query) WriteDB() *Query {
 
 func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 	return &Query{
-		db:                    db,
-		Building:              q.Building.replaceDB(db),
-		DictsBuildingCategory: q.DictsBuildingCategory.replaceDB(db),
-		DictsMaterial:         q.DictsMaterial.replaceDB(db),
-		Photo:                 q.Photo.replaceDB(db),
-		Project:               q.Project.replaceDB(db),
-		ProjectPhoto:          q.ProjectPhoto.replaceDB(db),
-		ProjectReview:         q.ProjectReview.replaceDB(db),
-		Service:               q.Service.replaceDB(db),
+		db:            db,
+		Building:      q.Building.replaceDB(db),
+		Photo:         q.Photo.replaceDB(db),
+		Project:       q.Project.replaceDB(db),
+		ProjectPhoto:  q.ProjectPhoto.replaceDB(db),
+		ProjectReview: q.ProjectReview.replaceDB(db),
+		Service:       q.Service.replaceDB(db),
+		User:          q.User.replaceDB(db),
 	}
 }
 
 type queryCtx struct {
-	Building              IBuildingDo
-	DictsBuildingCategory IDictsBuildingCategoryDo
-	DictsMaterial         IDictsMaterialDo
-	Photo                 IPhotoDo
-	Project               IProjectDo
-	ProjectPhoto          IProjectPhotoDo
-	ProjectReview         IProjectReviewDo
-	Service               IServiceDo
+	Building      IBuildingDo
+	Photo         IPhotoDo
+	Project       IProjectDo
+	ProjectPhoto  IProjectPhotoDo
+	ProjectReview IProjectReviewDo
+	Service       IServiceDo
+	User          IUserDo
 }
 
 func (q *Query) WithContext(ctx context.Context) *queryCtx {
 	return &queryCtx{
-		Building:              q.Building.WithContext(ctx),
-		DictsBuildingCategory: q.DictsBuildingCategory.WithContext(ctx),
-		DictsMaterial:         q.DictsMaterial.WithContext(ctx),
-		Photo:                 q.Photo.WithContext(ctx),
-		Project:               q.Project.WithContext(ctx),
-		ProjectPhoto:          q.ProjectPhoto.WithContext(ctx),
-		ProjectReview:         q.ProjectReview.WithContext(ctx),
-		Service:               q.Service.WithContext(ctx),
+		Building:      q.Building.WithContext(ctx),
+		Photo:         q.Photo.WithContext(ctx),
+		Project:       q.Project.WithContext(ctx),
+		ProjectPhoto:  q.ProjectPhoto.WithContext(ctx),
+		ProjectReview: q.ProjectReview.WithContext(ctx),
+		Service:       q.Service.WithContext(ctx),
+		User:          q.User.WithContext(ctx),
 	}
 }
 

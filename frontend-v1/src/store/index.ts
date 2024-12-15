@@ -4,6 +4,7 @@ import buildingReducer from './slices/buildings/buildingItem';
 import servicesSlice from './slices/services/servicesSlice';
 import projectsSlice from './slices/projects/projectsSlice';
 import projectSlice from './slices/projects/projectSlice'; 
+import authReducer from './slices/auth/authSlice';
 
 export const store = configureStore({
   reducer: {
@@ -11,7 +12,8 @@ export const store = configureStore({
     building: buildingReducer,
     services: servicesSlice,
     projects: projectsSlice,
-    project: projectSlice
+    project: projectSlice,
+    auth: authReducer,
   },
 });
 

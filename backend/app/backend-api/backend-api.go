@@ -31,6 +31,7 @@ func main() {
 
 	storage.InitMinio(cfg.MinioEndpoint, cfg.MinioAccessKey, cfg.MinioSecretKey, false)
 
+	db.SeedAdmin(database, *cfg, log)
 	r := chi.NewRouter()
 
 	r.Use(cors.Handler(cors.Options{
@@ -42,7 +43,7 @@ func main() {
 		MaxAge:           300,
 	}))
 
-	api.InitRoutes(r, database, log)
+	api.InitRoutes(r, database, cfg, log)
 
 	log.Info("Starting server", zap.String("address", cfg.ServerAddress))
 	if err := http.ListenAndServe(cfg.ServerAddress, r); err != nil {

@@ -1,4 +1,4 @@
-import { NotFoundPage } from 'components/notFound/notFound';
+import { NotFoundPage } from 'components/NotFound';
 import { AboutPage } from 'pages/about-pages/AboutPage';
 import AdminPage from 'pages/admin/AdminPage';
 import { CatalogPage } from 'pages/catalog/CatalogPage';
@@ -45,6 +45,15 @@ export const baseRoutes: RoutesType[] = [
     },
     {
         path: '/admin',
-        component: AdminPage
+        component: AdminPage,
+        protected: true // Маршрут защищён
+    },
+    {
+        path: '/404',
+        component: NotFoundPage
+    },
+    {
+        path: '*',
+        component: NotFoundPage
     }
 ];

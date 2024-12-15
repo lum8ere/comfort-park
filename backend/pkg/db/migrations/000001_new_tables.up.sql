@@ -1,26 +1,3 @@
-CREATE TABLE services (
-    id TEXT PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-    name VARCHAR(255),
-    description TEXT,
-    price DECIMAL(10,2),
-    image_url VARCHAR(255),
-    is_active BOOLEAN NOT NULL DEFAULT true
-);
-
-CREATE TABLE dicts_materials (
-    id TEXT PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-    code TEXT UNIQUE NOT NULL,
-    name text, 
-    is_active BOOLEAN NOT NULL DEFAULT true
-);
-
-CREATE TABLE dicts_building_category (
-    id TEXT PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-    code TEXT UNIQUE NOT NULL,
-    name text, 
-    is_active BOOLEAN NOT NULL DEFAULT true
-);
-
 CREATE TABLE buildings (
     id TEXT PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
     name TEXT, -- название
@@ -63,4 +40,22 @@ CREATE TABLE project_reviews (
     comment TEXT,
     photos []TEXT,
     created_at TIMESTAMP DEFAULT NOW()
-)
+);
+
+CREATE TABLE services (
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+    name VARCHAR(255),
+    description TEXT,
+    price DECIMAL(10,2),
+    image_url VARCHAR(255),
+    is_active BOOLEAN NOT NULL DEFAULT true
+);
+
+CREATE TABLE users (
+    id TEXT PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+    name TEXT,
+    email TEXT UNIQUE NOT NULL,
+    password TEXT NOT NULL,
+    role TEXT,
+    created_at TIMESTAMP DEFAULT NOW()
+);

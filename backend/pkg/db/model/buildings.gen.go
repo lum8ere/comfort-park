@@ -13,6 +13,8 @@ const TableNameBuilding = "buildings"
 // Building mapped from table <buildings>
 type Building struct {
 	ID           string    `gorm:"column:id;primaryKey;default:gen_random_uuid()" json:"id"`
+	CategoryCode string    `gorm:"column:category_code" json:"category_code"`
+	MaterialCode string    `gorm:"column:material_code" json:"material_code"`
 	Name         string    `gorm:"column:name" json:"name"`
 	Size         string    `gorm:"column:size" json:"size"`
 	Floors       int32     `gorm:"column:floors;not null;default:1" json:"floors"`
