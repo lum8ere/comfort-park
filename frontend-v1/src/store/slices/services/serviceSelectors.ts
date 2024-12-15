@@ -8,15 +8,3 @@ export const selectServices = (state: RootState) => state.services.services;
 export const selectServises = createSelector([selectServices], (services) => {
     return [...services].sort((a, b) => a.price - b.price); // Сортируем по возрастанию цены
 });
-
-// export const selectCatalogBuildings = createSelector([selectBuildings], (buildings) => {
-//     return [...buildings].sort((a, b) => a.price - b.price); // Сортируем по возрастанию цены
-// });
-
-// export const selectBuildingItem = createSelector([selectBuilding], (building) => {
-//     if (!building) return null;
-
-//     console.log(building)
-
-//     return building;
-// });
