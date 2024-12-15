@@ -24,12 +24,17 @@ const ProjectsManagement: React.FC = () => {
     }, [dispatch]);
 
     const columns = [
-        { title: 'Название проекта', dataIndex: 'name', key: 'name' },
+        {
+            title: 'Название проекта',
+            dataIndex: 'name',
+            key: 'name',
+            sorter: (a: any, b: any) => a.name.localeCompare(b.name)
+        },
         { title: 'Описание', dataIndex: 'description', key: 'description' },
         {
             title: 'Отзывы',
-            dataIndex: 'project_review',
-            key: 'project_review',
+            dataIndex: 'ProjectPhoto',
+            key: 'ProjectPhoto',
             render: (reviews: any[]) => reviews?.length || 0
         },
         {
@@ -59,6 +64,7 @@ const ProjectsManagement: React.FC = () => {
         });
         // Отзывы загрузим, если хотите редактировать и отзывы.
         // Если нет логики обновления отзывов при редактировании - можно оставить пустым.
+        // TODO: доделать
         setReviews([]);
         setIsModalVisible(true);
     };

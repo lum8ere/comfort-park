@@ -32,9 +32,19 @@ const ServicesManagement: React.FC = () => {
     }, [dispatch]);
 
     const columns = [
-        { title: 'Название услуги', dataIndex: 'name', key: 'name' },
+        {
+            title: 'Название услуги',
+            dataIndex: 'name',
+            key: 'name',
+            sorter: (a: any, b: any) => a.name.localeCompare(b.name)
+        },
         { title: 'Описание', dataIndex: 'description', key: 'description' },
-        { title: 'Цена', dataIndex: 'price', key: 'price' },
+        {
+            title: 'Цена',
+            dataIndex: 'price',
+            key: 'price',
+            sorter: (a: any, b: any) => a.price - b.price
+        },
         {
             title: 'Активно',
             dataIndex: 'is_active',

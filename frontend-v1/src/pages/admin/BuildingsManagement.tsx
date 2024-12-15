@@ -11,10 +11,12 @@ import {
     Upload,
     notification,
     Modal,
-    Popconfirm
+    Popconfirm,
+    Spin
 } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux'; // Предполагаем, что у нас есть такой экшен
+import { RootState } from 'store';
 import { fetchBuildings } from 'store/slices/buildings/buildingsSlice';
 import { selectBuildings } from 'store/slices/buildings/buildingSelectors';
 import { useAppDispatch } from 'store/hooks';
@@ -23,6 +25,8 @@ import axios from '../../service/axiosConfig';
 const BuildingsManagement: React.FC = () => {
     const dispatch = useAppDispatch();
     const buildings = useSelector(selectBuildings);
+    const { loading, error } = useSelector((state: RootState) => state.buildings);
+
     const [form] = Form.useForm();
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [editingBuilding, setEditingBuilding] = useState<any>(null); // объект текущего редактируемого здания
@@ -32,11 +36,26 @@ const BuildingsManagement: React.FC = () => {
     }, [dispatch]);
 
     const columns = [
-        { title: 'Название', dataIndex: 'name', key: 'name' },
+        {
+            title: 'Название',
+            dataIndex: 'name',
+            key: 'name',
+            sorter: (a: any, b: any) => a.name.localeCompare(b.name)
+        },
         { title: 'Размер', dataIndex: 'size', key: 'size' },
         { title: 'Этажность', dataIndex: 'floors', key: 'floors' },
-        { title: 'Площадь', dataIndex: 'area', key: 'area' },
-        { title: 'Цена', dataIndex: 'price', key: 'price' },
+        {
+            title: 'Площадь',
+            dataIndex: 'area',
+            key: 'area',
+            sorter: (a: any, b: any) => a.area - b.area
+        },
+        {
+            title: 'Цена',
+            dataIndex: 'price',
+            key: 'price',
+            sorter: (a: any, b: any) => a.price - b.price
+        },
         {
             title: 'Активно',
             dataIndex: 'is_active',
@@ -137,6 +156,7 @@ const BuildingsManagement: React.FC = () => {
             <Button type="primary" onClick={openAddModal}>
                 Добавить здание
             </Button>
+
             <Table
                 columns={columns}
                 dataSource={buildings}
