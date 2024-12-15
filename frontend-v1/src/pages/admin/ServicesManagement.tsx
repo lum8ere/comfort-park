@@ -74,8 +74,8 @@ const ServicesManagement: React.FC = () => {
             price: service.price,
             isActive: service.is_active
         });
-        // Для изображения нельзя просто так поставить value, 
-        // так как оно не возвращается в fileList. Но можно оставить пустым поле, 
+        // Для изображения нельзя просто так поставить value,
+        // так как оно не возвращается в fileList. Но можно оставить пустым поле,
         // предполагая, что новое изображение загружать не обязательно.
         setIsModalVisible(true);
     };
@@ -127,11 +127,20 @@ const ServicesManagement: React.FC = () => {
     return (
         <div>
             <h2>Управление услугами</h2>
-            <Button type="primary" onClick={openAddModal}>Добавить услугу</Button>
-            <Table columns={columns} dataSource={services} rowKey="id" style={{ marginTop: 16 }} />
+            <Button type="primary" onClick={openAddModal}>
+                Добавить услугу
+            </Button>
+            <Table
+                columns={columns}
+                dataSource={services}
+                rowKey="id"
+                style={{ marginTop: 16 }}
+                size="small"
+                scroll={{ x: true }}
+            />
 
             <Modal
-                title={editingService ? "Редактировать услугу" : "Добавить услугу"}
+                title={editingService ? 'Редактировать услугу' : 'Добавить услугу'}
                 visible={isModalVisible}
                 onCancel={() => setIsModalVisible(false)}
                 footer={null}
@@ -150,7 +159,9 @@ const ServicesManagement: React.FC = () => {
                         name="image"
                         label="Фото"
                         valuePropName="fileList"
-                        getValueFromEvent={(e: any) => (Array.isArray(e.fileList) ? e.fileList : [])}
+                        getValueFromEvent={(e: any) =>
+                            Array.isArray(e.fileList) ? e.fileList : []
+                        }
                     >
                         <Upload beforeUpload={() => false} listType="picture">
                             <Button icon={<UploadOutlined />}>Загрузить фото</Button>

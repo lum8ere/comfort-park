@@ -137,7 +137,14 @@ const BuildingsManagement: React.FC = () => {
             <Button type="primary" onClick={openAddModal}>
                 Добавить здание
             </Button>
-            <Table columns={columns} dataSource={buildings} rowKey="id" style={{ marginTop: 16 }} />
+            <Table
+                columns={columns}
+                dataSource={buildings}
+                rowKey="id"
+                style={{ marginTop: 16 }}
+                size="small"
+                scroll={{ x: true }}
+            />
 
             <Modal
                 title={editingBuilding ? 'Редактировать здание' : 'Добавить здание'}

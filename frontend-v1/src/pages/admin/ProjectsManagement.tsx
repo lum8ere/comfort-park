@@ -1,16 +1,7 @@
 // src/pages/admin/ProjectsManagement.tsx
 
 import React, { useEffect, useState } from 'react';
-import {
-    Table,
-    Form,
-    Input,
-    Button,
-    Upload,
-    notification,
-    Modal,
-    Popconfirm
-} from 'antd';
+import { Table, Form, Input, Button, Upload, notification, Modal, Popconfirm } from 'antd';
 import { UploadOutlined, PlusOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from 'store/hooks';
@@ -64,9 +55,9 @@ const ProjectsManagement: React.FC = () => {
         setEditingProject(project);
         form.setFieldsValue({
             name: project.name,
-            description: project.description,
+            description: project.description
         });
-        // Отзывы загрузим, если хотите редактировать и отзывы. 
+        // Отзывы загрузим, если хотите редактировать и отзывы.
         // Если нет логики обновления отзывов при редактировании - можно оставить пустым.
         setReviews([]);
         setIsModalVisible(true);
@@ -153,11 +144,20 @@ const ProjectsManagement: React.FC = () => {
     return (
         <div>
             <h2>Управление проектами</h2>
-            <Button type="primary" onClick={openAddModal}>Добавить проект</Button>
-            <Table columns={columns} dataSource={projects} rowKey="id" style={{ marginTop: 16 }} />
+            <Button type="primary" onClick={openAddModal}>
+                Добавить проект
+            </Button>
+            <Table
+                columns={columns}
+                dataSource={projects}
+                rowKey="id"
+                style={{ marginTop: 16 }}
+                size="small"
+                scroll={{ x: true }}
+            />
 
             <Modal
-                title={editingProject ? "Редактировать проект" : "Добавить проект"}
+                title={editingProject ? 'Редактировать проект' : 'Добавить проект'}
                 visible={isModalVisible}
                 onCancel={() => setIsModalVisible(false)}
                 footer={null}
@@ -185,7 +185,14 @@ const ProjectsManagement: React.FC = () => {
                     <div style={{ marginBottom: 16 }}>
                         <h3>Отзывы</h3>
                         {reviews.map((review, index) => (
-                            <div key={index} style={{ marginBottom: 16, border: '1px solid #f0f0f0', padding: '8px' }}>
+                            <div
+                                key={index}
+                                style={{
+                                    marginBottom: 16,
+                                    border: '1px solid #f0f0f0',
+                                    padding: '8px'
+                                }}
+                            >
                                 <div style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
                                     <Input
                                         placeholder="Имя"
@@ -220,7 +227,9 @@ const ProjectsManagement: React.FC = () => {
                                     style={{ marginBottom: 8 }}
                                 />
                                 <div>
-                                    <span style={{ display: 'block', marginBottom: 4 }}>Фото отзыва:</span>
+                                    <span style={{ display: 'block', marginBottom: 4 }}>
+                                        Фото отзыва:
+                                    </span>
                                     <Upload
                                         beforeUpload={() => false}
                                         multiple
@@ -235,7 +244,11 @@ const ProjectsManagement: React.FC = () => {
                                         <Button icon={<UploadOutlined />}>Загрузить фото</Button>
                                     </Upload>
                                 </div>
-                                <Button danger onClick={() => onRemoveReview(index)} style={{ marginTop: 8 }}>
+                                <Button
+                                    danger
+                                    onClick={() => onRemoveReview(index)}
+                                    style={{ marginTop: 8 }}
+                                >
                                     Удалить отзыв
                                 </Button>
                             </div>

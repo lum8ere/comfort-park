@@ -1,6 +1,7 @@
 .ant-menu-light .ant-menu-item-selected {
     background-color: #8e3131;
     color: #fff !important;
+    font-weight: normal !important; /* Убрать увеличение толщины шрифта */
 }
 
 .ant-layout-sider {
