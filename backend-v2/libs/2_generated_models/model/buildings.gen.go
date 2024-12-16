@@ -24,6 +24,9 @@ type Building struct {
 	Price        int32     `gorm:"column:price" json:"price"`
 	CreatedAt    time.Time `gorm:"column:created_at;default:now()" json:"created_at"`
 	IsActive     bool      `gorm:"column:is_active;not null;default:true" json:"is_active"`
+
+	// Ручные ассоциации buildings
+	Photos        []Photo                		`gorm:"foreignKey:BuildingID"`
 }
 
 // TableName Building's table name

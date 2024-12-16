@@ -36,6 +36,7 @@ func main() {
 	r := chi.NewRouter()
 
 	r.Use(chi_middleware.Logger)
+	r.Use(chi_middleware.Recoverer)
 
 	r.Use(cors.Handler(cors.Options{
 		AllowedOrigins:   []string{"https://*", "http://*"},

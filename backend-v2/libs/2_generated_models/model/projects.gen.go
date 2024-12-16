@@ -16,6 +16,9 @@ type Project struct {
 	Name        string    `gorm:"column:name" json:"name"`
 	Description string    `gorm:"column:description" json:"description"`
 	CreatedAt   time.Time `gorm:"column:created_at;default:now()" json:"created_at"`
+
+	ProjectPhoto        	[]ProjectPhoto       `gorm:"foreignKey:RootID"`
+	ProjectReview 			[]ProjectReview	     `gorm:"foreignKey:RootID"`
 }
 
 // TableName Project's table name
