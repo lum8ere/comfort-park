@@ -1,10 +1,11 @@
 package smart_context
 
 import (
-	"backed-api/libs/4_common/types"
+	"backed-api-v2/libs/4_common/types"
 	"context"
 
 	"go.uber.org/zap"
+	"gorm.io/gorm"
 )
 
 type ISmartContext interface {
@@ -34,6 +35,9 @@ type ISmartContext interface {
 
 	WithDbManager(db IDbManager) ISmartContext
 	GetDbManager() IDbManager
+
+	WithDB(db *gorm.DB) ISmartContext
+	GetDB() *gorm.DB
 
 	// Метод для получения стандартного context.Context
 	WithContext(ctx context.Context) ISmartContext

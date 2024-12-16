@@ -1,19 +1,16 @@
 package main
 
 import (
-	"backed-api/libs/3_infrastructure/db_manager"
-	"backed-api/libs/3_infrastructure/minio_manager"
-	"backed-api/libs/4_common/env_vars"
-	"backed-api/libs/4_common/smart_context"
-	"backed-api/pkg/api"
-	"backed-api/pkg/config"
+	"backed-api-v2/libs/3_infrastructure/db_manager"
+	"backed-api-v2/libs/3_infrastructure/minio_manager"
+	"backed-api-v2/libs/4_common/env_vars"
+	"backed-api-v2/libs/4_common/smart_context"
 	"net/http"
 	"os"
 
 	"github.com/go-chi/chi"
 	chi_middleware "github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
-	"go.uber.org/zap"
 )
 
 func main() {
@@ -21,8 +18,6 @@ func main() {
 	os.Setenv("LOG_LEVEL", "debug")
 
 	logger := smart_context.NewSmartContext()
-
-	cfg := config.LoadConfig()
 
 	dbm, err := db_manager.NewDbManager(logger)
 	if err != nil {
@@ -51,10 +46,9 @@ func main() {
 		MaxAge:           300,
 	}))
 
-	api.InitRoutes(logger, r)
+	// api.InitRoutes(logger, r)
 
-	logger.Info("Starting server", zap.String("address", cfg.ServerAddress))
-	if err := http.ListenAndServe(cfg.ServerAddress, r); err != nil {
-		logger.Fatal("Server failed", zap.Error(err))
-	}
+	logger.Info("Server listening on port 4000")
+	err = http.ListenAndServe(":4000", r)
+	logger.Fatal(err)
 }

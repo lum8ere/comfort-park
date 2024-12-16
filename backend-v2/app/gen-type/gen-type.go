@@ -1,40 +1,37 @@
 package main
 
 import (
-	"backed-api/pkg/config"
-	"backed-api/pkg/db"
-	"backed-api/pkg/logger"
+	"backed-api-v2/libs/3_infrastructure/db_manager"
+	"backed-api-v2/libs/4_common/env_vars"
+	"backed-api-v2/libs/4_common/smart_context"
+	"os"
 
-	"go.uber.org/zap"
 	"gorm.io/gen"
 )
 
 // Dynamic SQL
 type Querier interface {
-	// SELECT * FROM @@table WHERE name = @name{{if role !=""}} AND role = @role{{end}}
 	FilterWithNameAndRole(name, role string) ([]gen.T, error)
 }
 
 func main() {
-	cfg := config.LoadConfig()
+	env_vars.LoadEnvVars()
+	os.Setenv("LOG_LEVEL", "info")
+	logger := smart_context.NewSmartContext()
 
-	log, err := logger.NewLogger()
+	dbm, err := db_manager.NewDbManager(logger)
 	if err != nil {
-		panic(err)
+		logger.Fatalf("NewDbManager failed: %v", err)
 	}
-	defer log.Sync()
 
-	database, err := db.NewDatabase(cfg, log)
-	if err != nil {
-		log.Fatal("Failed to connect to database", zap.Error(err))
-	}
+	logger = logger.WithDB(dbm.GetGORM())
 
 	g := gen.NewGenerator(gen.Config{
-		OutPath: "./pkg/db/models",
+		OutPath: "./libs/2_generated_models/query",
 		Mode:    gen.WithoutContext | gen.WithDefaultQuery | gen.WithQueryInterface, // generate mode
 	})
 
-	g.UseDB(database) // теперь database имеет тип *gorm.io/gorm.DB
+	g.UseDB(logger.GetDB())
 
 	g.ApplyBasic(
 		g.GenerateAllTable()...,

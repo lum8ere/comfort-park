@@ -1,7 +1,7 @@
 package db_manager
 
 import (
-	"backed-api/libs/4_common/smart_context"
+	"backed-api-v2/libs/4_common/smart_context"
 	"errors"
 	"os"
 

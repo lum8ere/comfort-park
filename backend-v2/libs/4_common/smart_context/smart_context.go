@@ -1,7 +1,7 @@
 package smart_context
 
 import (
-	"backed-api/libs/4_common/types"
+	"backed-api-v2/libs/4_common/types"
 	"context"
 	"fmt"
 	"os"
@@ -10,6 +10,11 @@ import (
 
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
+	"gorm.io/gorm"
+)
+
+const (
+	DB_KEY = "db"
 )
 
 var _ ISmartContext = (*SmartContext)(nil)
@@ -210,6 +215,23 @@ func (sc *SmartContext) GetMinioManager() IMinioManager {
 		return nil
 	}
 	return result
+}
+
+func (sc *SmartContext) WithDB(db *gorm.DB) ISmartContext {
+	return sc.WithField(DB_KEY, db)
+}
+
+func (sc *SmartContext) GetDB() *gorm.DB {
+	tx, ok := types.GetFieldTypedValue[*gorm.DB](sc.dataFields, DB_KEY)
+	if !ok {
+		return nil
+	}
+	if tx == nil {
+		return nil
+	}
+
+	tx = tx.Session(&gorm.Session{NewDB: true, PropagateUnscoped: true, Context: sc.GetContext()})
+	return tx
 }
 
 func getLogLevel() zapcore.Level {

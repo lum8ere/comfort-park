@@ -1,4 +1,4 @@
-module backed-api
+module backed-api-v2
 
 go 1.23.0
 

@@ -1,7 +1,7 @@
 package env_vars
 
 import (
-	"backed-api/libs/4_common/smart_context"
+	"backed-api-v2/libs/4_common/smart_context"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -18,32 +18,33 @@ func GetCurrentFolder() string {
 
 func LoadEnvVars() {
 	sctx := smart_context.NewSmartContext()
-	_, filename, _, ok := runtime.Caller(0) // Get the current file path
+	_, filename, _, ok := runtime.Caller(0) // Получить путь текущего файла
 	if !ok {
 		sctx.Fatal("Error finding current file path")
 	}
 
-	basePath := filepath.Dir(filename) // Get the directory of the current file
+	basePath := filepath.Dir(filename) // Директория текущего файла
 	sctx.Infof("Current file path: %s", basePath)
 
 	envFile := os.Getenv("ENV_PATH")
 	if envFile == "" {
-		sctx.Info("ENV_PATH is not set, not loading .env file. Using environment variables from the system.")
-		return // we are not locally start the app
+		// Устанавливаем путь по умолчанию к local.env
+		envFile = filepath.Join(basePath, "..", "..", "..", "..", "envs", "local.env")
+		sctx.Infof("ENV_PATH is not set, using default path: %s", envFile)
+	} else {
+		sctx.Infof("Found ENV_PATH='%s', so loading environment variables from this file...", envFile)
 	}
 
-	sctx.Infof("Found ENV_PATH='%s', so loading environment variables from this file...", envFile)
-
-	// Load the .env file
-	envFullFilePath := filepath.Join(basePath, envFile) // Construct the path to your .env file
+	// Загрузка файла .env
+	envFullFilePath := filepath.Clean(envFile) // Очистка пути
 	err := godotenv.Load(envFullFilePath)
 	if err != nil {
-		// current working directory
+		// Текущая рабочая директория
 		cwd, _ := os.Getwd()
 
 		sctx.Fatalf("Error loading .env file: %v. Current directory '%s'", err.Error(), cwd)
 	} else {
-		sctx.Infof("Loaded .env file '%s'", envFile)
+		sctx.Infof("Loaded .env file '%s'", envFullFilePath)
 	}
 }
 
