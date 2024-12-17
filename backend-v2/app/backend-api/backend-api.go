@@ -1,6 +1,7 @@
 package main
 
 import (
+	"backed-api-v2/libs/1_domain_methods/routes"
 	"backed-api-v2/libs/3_infrastructure/db_manager"
 	"backed-api-v2/libs/3_infrastructure/minio_manager"
 	"backed-api-v2/libs/4_common/env_vars"
@@ -8,7 +9,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/v5"
 	chi_middleware "github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
 )
@@ -24,6 +25,7 @@ func main() {
 		logger.Fatalf("Error connecting to database: %v", err)
 	}
 	logger = logger.WithDbManager(dbm)
+	logger = logger.WithDB(dbm.GetGORM())
 
 	minioManager, err := minio_manager.NewMinioManager()
 	if err != nil {
@@ -47,7 +49,7 @@ func main() {
 		MaxAge:           300,
 	}))
 
-	// api.InitRoutes(logger, r)
+	routes.InitRoutes(logger, r)
 
 	logger.Info("Server listening on port 4000")
 	err = http.ListenAndServe(":4000", r)

@@ -17,8 +17,6 @@ type Photo struct {
 	BuildingID string    `gorm:"column:building_id" json:"building_id"`
 	IsGallery  bool      `gorm:"column:is_gallery;not null" json:"is_gallery"`
 	CreatedAt  time.Time `gorm:"column:created_at;default:now()" json:"created_at"`
-
-	Building Building `gorm:"foreignKey:BuildingID"`
 }
 
 // TableName Photo's table name
