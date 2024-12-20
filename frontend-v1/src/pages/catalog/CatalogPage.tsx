@@ -17,6 +17,7 @@ export const CatalogPage = () => {
 
     // Селектор для получения всех зданий
     const buildings = useSelector(selectBuildings);
+    console.log("buildings catalog", buildings)
 
     const { loading, error } = useSelector((state: RootState) => state.buildings);
 
@@ -92,7 +93,7 @@ export const CatalogPage = () => {
                         >
                             <BuildingCard
                                 id={building.id}
-                                images={building.photos || []}
+                                images={building.Photos || []}
                                 name={building.name}
                                 size={building.size}
                                 floors={building.floors}

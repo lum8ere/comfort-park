@@ -31,22 +31,20 @@ func InitRoutes(sctx smart_context.ISmartContext, r *chi.Mux) {
 		r.Get("/token", run_processor.JSONResponseMiddleware(sctx, auth.CheckTokenHandler))
 	})
 
-	// // Защищенные маршруты
-	// r.Group(func(r chi.Router) {
-	// 	r.Use(middlewares.JWTMiddleware(appCtx)) // Применяем JWT middleware
+	// Защищенные маршруты
+	r.Group(func(r chi.Router) {
+		r.Use(auth.JWTMiddleware(sctx))
 
-	// 	r.Post("/prod/buildings", middlewares.JSONResponseMiddleware(handlers.CreateBuildingHandler, appCtx))
-	// 	r.Put("/prod/buildings/{id}", middlewares.JSONResponseMiddleware(handlers.UpdateBuildingHandler, appCtx))
-	// 	r.Delete("/prod/buildings/{id}", middlewares.JSONResponseMiddleware(handlers.DeleteBuildingHandler, appCtx))
+		r.Post("/prod/buildings", run_processor.JSONResponseMiddleware(sctx, buildings.CreateBuildingHandler))
+		r.Put("/prod/buildings/{id}", run_processor.JSONResponseMiddleware(sctx, buildings.UpdateBuildingHandler))
+		r.Delete("/prod/buildings/{id}", run_processor.JSONResponseMiddleware(sctx, buildings.DeleteBuildingHandler))
 
-	// 	r.Post("/prod/projects", middlewares.JSONResponseMiddleware(handlers.CreateProjectHandler, appCtx))
-	// 	r.Put("/prod/services/{id}", middlewares.JSONResponseMiddleware(handlers.UpdateServiceHandler, appCtx))
-	// 	r.Delete("/prod/services/{id}", middlewares.JSONResponseMiddleware(handlers.DeleteServiceHandler, appCtx))
+		// r.Post("/prod/projects", middlewares.JSONResponseMiddleware(handlers.CreateProjectHandler, appCtx))
+		// r.Put("/prod/services/{id}", middlewares.JSONResponseMiddleware(handlers.UpdateServiceHandler, appCtx))
+		// r.Delete("/prod/services/{id}", middlewares.JSONResponseMiddleware(handlers.DeleteServiceHandler, appCtx))
 
-	// 	r.Post("/prod/services", middlewares.JSONResponseMiddleware(handlers.CreateServiceHandler, appCtx))
-	// 	r.Put("/prod/projects/{id}", middlewares.JSONResponseMiddleware(handlers.UpdateProjectHandler, appCtx))
-	// 	r.Delete("/prod/projects/{id}", middlewares.JSONResponseMiddleware(handlers.DeleteProjectHandler, appCtx))
-
-	// 	r.Post("/prod/upload", middlewares.JSONResponseMiddleware(handlers.UploadPhotoHandler, appCtx))
-	// })
+		// r.Post("/prod/services", middlewares.JSONResponseMiddleware(handlers.CreateServiceHandler, appCtx))
+		// r.Put("/prod/projects/{id}", middlewares.JSONResponseMiddleware(handlers.UpdateProjectHandler, appCtx))
+		// r.Delete("/prod/projects/{id}", middlewares.JSONResponseMiddleware(handlers.DeleteProjectHandler, appCtx))
+	})
 }

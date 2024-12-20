@@ -87,21 +87,19 @@ func parseGetParams(sctx smart_context.ISmartContext, r *http.Request) (map[stri
 func parseFormParams(r *http.Request) (map[string]interface{}, error) {
 	data := make(map[string]interface{})
 
-	// Определяем тип контента
 	contentType := r.Header.Get("Content-Type")
 	if contentType == "" {
 		return nil, errors.New("Content-Type header is missing")
 	}
 
-	// Парсим форму
-	if err := r.ParseMultipartForm(10 << 20); err != nil { // Ограничение на 10MB
+	if err := r.ParseMultipartForm(20 << 20); err != nil { // ограничение 20MB
 		return nil, err
 	}
 
-	// Извлекаем все значения формы
+	// Извлекаем текстовые поля формы
 	for key, values := range r.Form {
 		if len(values) > 0 {
-			// Попробуем преобразовать в int или float, если применимо
+			// Попытка преобразования в int или float
 			if intVal, err := strconv.Atoi(values[0]); err == nil {
 				data[key] = intVal
 			} else if floatVal, err := strconv.ParseFloat(values[0], 64); err == nil {
@@ -109,6 +107,13 @@ func parseFormParams(r *http.Request) (map[string]interface{}, error) {
 			} else {
 				data[key] = values[0]
 			}
+		}
+	}
+
+	// Извлекаем файлы, если есть
+	if r.MultipartForm != nil && r.MultipartForm.File != nil {
+		if files, ok := r.MultipartForm.File["photos"]; ok && len(files) > 0 {
+			data["files"] = files
 		}
 	}
 

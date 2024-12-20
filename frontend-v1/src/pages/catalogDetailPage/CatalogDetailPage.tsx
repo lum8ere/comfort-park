@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Button, Typography, Image } from 'antd';
 import { useSelector } from 'react-redux';
@@ -14,7 +14,27 @@ import { ChartArea, HouseSize, Price, StairsFloor } from 'assets/card';
 const { Title, Paragraph } = Typography;
 const { PreviewGroup } = Image;
 
-export const CatalogDetailPage = () => {
+interface Photo {
+    id: string;
+    url: string;
+    building_id: string;
+    is_gallery: boolean;
+    created_at: string; // или Date, в зависимости от реализации
+}
+
+interface Building {
+    id: string;
+    name: string;
+    photos: Photo[];
+    area: number;
+    size: string;
+    floors: number;
+    price: number | string;
+    description: string;
+    // Добавьте другие необходимые поля
+}
+
+export const CatalogDetailPage: React.FC = () => {
     const { id } = useParams<{ id: string }>(); // Получаем ID из URL
     const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number>(0);
     const dispatch = useAppDispatch();
@@ -56,13 +76,24 @@ export const CatalogDetailPage = () => {
         );
     }
 
-    const photos = building?.photos || [];
+    if (!building) {
+        return (
+            <div className="centered-content">
+                <Title level={3}>Данные не найдены</Title>
+                <Paragraph>
+                    К сожалению, информация о данном объекте отсутствует.
+                </Paragraph>
+            </div>
+        );
+    }
+
+    const photos = building.Photos;
     const mainPhoto = photos[selectedPhotoIndex];
 
     return (
         <div className="catalog-detail-page">
             <Title level={1} className="catalog-detail-title">
-                {building?.name}
+                {building.name}
             </Title>
             <div className="catalog-detail-container">
                 <div className="catalog-detail-left">
@@ -71,7 +102,7 @@ export const CatalogDetailPage = () => {
                             <PreviewGroup>
                                 <div className="main-photo-wrapper">
                                     <Image
-                                        src={mainPhoto}
+                                        src={mainPhoto?.url}
                                         alt={`Изображение ${selectedPhotoIndex + 1}`}
                                         className="main-photo"
                                         preview={{
@@ -85,12 +116,12 @@ export const CatalogDetailPage = () => {
                                             if (index === selectedPhotoIndex) return null;
                                             return (
                                                 <div
-                                                    key={index}
+                                                    key={photo.id}
                                                     className="thumbnail-wrapper"
                                                     onClick={() => setSelectedPhotoIndex(index)}
                                                 >
                                                     <Image
-                                                        src={photo}
+                                                        src={photo.url}
                                                         alt={`Миниатюра ${index + 1}`}
                                                         className="thumbnail"
                                                         preview={false}
@@ -117,7 +148,7 @@ export const CatalogDetailPage = () => {
                                     <div className="info-text">
                                         <Paragraph className="info-label">Площадь:</Paragraph>
                                         <Paragraph className="info-value">
-                                            {building?.area} м²
+                                            {building.area} м²
                                         </Paragraph>
                                     </div>
                                 </div>
@@ -129,7 +160,7 @@ export const CatalogDetailPage = () => {
                                     <div className="info-text">
                                         <Paragraph className="info-label">Размеры:</Paragraph>
                                         <Paragraph className="info-value">
-                                            {building?.size}
+                                            {building.size}
                                         </Paragraph>
                                     </div>
                                 </div>
@@ -141,7 +172,7 @@ export const CatalogDetailPage = () => {
                                     <div className="info-text">
                                         <Paragraph className="info-label">Этажность:</Paragraph>
                                         <Paragraph className="info-value">
-                                            {building?.floors}
+                                            {building.floors}
                                         </Paragraph>
                                     </div>
                                 </div>
@@ -153,7 +184,7 @@ export const CatalogDetailPage = () => {
                                     <div className="info-text">
                                         <Paragraph className="info-label">Цена:</Paragraph>
                                         <Paragraph className="info-value">
-                                            От {building?.price} рублей
+                                            От {building.price} рублей
                                         </Paragraph>
                                     </div>
                                 </div>
@@ -162,7 +193,7 @@ export const CatalogDetailPage = () => {
                     </div>
                     <div className="description-block">
                         <Title level={4}>Описание проекта</Title>
-                        <Paragraph>{building?.description}</Paragraph>
+                        <Paragraph>{building.description}</Paragraph>
                     </div>
                 </div>
             </div>

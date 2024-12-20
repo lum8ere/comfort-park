@@ -5,12 +5,13 @@ import testImage from 'assets/testImage.png';
 
 import './BuildingCard.scss';
 import { useNavigate } from 'react-router-dom';
+import { Photo } from 'store/slices/buildings/buildingsSlice';
 
 const { Title, Paragraph } = Typography;
 
 interface BuildingCardProps {
     id: string;
-    images: string[];
+    images: Photo[];
     name: string;
     size: string;
     floors: number;
@@ -32,7 +33,16 @@ export const BuildingCard: React.FC<BuildingCardProps> = ({
 }) => {
     const navigate = useNavigate();
 
-    const displayImages = images.length > 0 ? images : [testImage];
+    // Создаём объект Photo по умолчанию для testImage
+    const defaultPhoto: Photo = {
+        id: 'default',
+        url: testImage,
+        building_id: '',
+        is_gallery: false,
+        created_at: new Date(),
+    };
+
+    const displayImages: Photo[] = images.length > 0 ? images : [defaultPhoto];
 
     return (
         <Card className="building-card">
@@ -43,9 +53,9 @@ export const BuildingCard: React.FC<BuildingCardProps> = ({
                     className="building-card-carousel"
                     dots={false}
                 >
-                    {displayImages.map((image, index) => (
-                        <div key={index} className="carousel-image-container">
-                            <img src={image} alt={name} className="carousel-image" />
+                    {displayImages.map((image) => (
+                        <div key={image.id} className="carousel-image-container">
+                            <img src={image.url} alt={`${name} - Фото`} className="carousel-image" />
                         </div>
                     ))}
                 </Carousel>
@@ -88,7 +98,13 @@ export const BuildingCard: React.FC<BuildingCardProps> = ({
                     </div>
 
                     <div className="button-wrapper">
-                        <Button className="details-button" onClick={() => navigate(`/catalog/${id}`)}>Подробнее</Button>
+                        <Button
+                            type="primary"
+                            className="details-button"
+                            onClick={() => navigate(`/catalog/${id}`)}
+                        >
+                            Подробнее
+                        </Button>
                     </div>
                 </div>
             </div>

@@ -3,19 +3,26 @@ import axiosInstance from '../../../service/axiosConfig';
 
 export interface Building {
     id: string; // Уникальный идентификатор
-    categoryCode: string; // Код категории
-    materialCode: string; // Код материала
     name: string; // Название
     size: string; // Размер
     floors: number; // Количество этажей
     area: number; // Площадь
     description: string; // Описание
-    photos: string[];
+    Photos: Photo[];
     bange: string;
     price: number;
     createdAt: string; //
     isActive: boolean; // Активный статус
 };
+
+export interface Photo {
+    id: string;
+    url: string;
+    building_id: string;
+    is_gallery: boolean;
+    created_at: Date;
+  }
+  
 
 interface BuildingsState {
     buildings: Building[];
@@ -32,6 +39,7 @@ const initialState: BuildingsState = {
 // Асинхронное действие для получения зданий
 export const fetchBuildings = createAsyncThunk('buildings/fetch', async () => {
     const response = await axiosInstance.get<Building[]>('/buildings');
+    console.log("response.data", response.data)
     return response.data;
 });
 
