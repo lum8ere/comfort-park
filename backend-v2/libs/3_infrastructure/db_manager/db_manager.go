@@ -19,7 +19,7 @@ func NewDbManager(sctx smart_context.ISmartContext) (*DbManager, error) {
 	if !ok {
 		return nil, errors.New("DATABASE_URL is not set")
 	}
-	sctx.Infof("DATABASE_URL: %s", databaseUrl)
+	sctx.Debugf("DATABASE_URL: %s", databaseUrl)
 
 	if sctx == nil {
 		sctx = smart_context.NewSmartContext()
@@ -49,10 +49,6 @@ func NewDbManager(sctx smart_context.ISmartContext) (*DbManager, error) {
 
 func (dbmanager *DbManager) GetGORM() *gorm.DB {
 	return dbmanager.db.Session(&gorm.Session{NewDB: true})
-}
-
-func (dbmanager *DbManager) RunUnderConnection(f func(tx *gorm.DB) error) error {
-	return dbmanager.db.Connection(f)
 }
 
 func (dbmanager *DbManager) GetJwtSecret() string {

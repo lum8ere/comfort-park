@@ -1,7 +1,9 @@
 package routes
 
 import (
+	"backed-api-v2/libs/1_domain_methods/handlers/auth"
 	"backed-api-v2/libs/1_domain_methods/handlers/buildings"
+	"backed-api-v2/libs/1_domain_methods/handlers/projects"
 	"backed-api-v2/libs/1_domain_methods/handlers/services"
 	"backed-api-v2/libs/1_domain_methods/run_processor"
 	"backed-api-v2/libs/4_common/smart_context"
@@ -21,12 +23,13 @@ func InitRoutes(sctx smart_context.ISmartContext, r *chi.Mux) {
 	r.Get("/services", run_processor.JSONResponseMiddleware(sctx, services.GetServicesHandler))
 	r.Get("/services/{id}", run_processor.JSONResponseMiddleware(sctx, services.GetServiceByIDHandler))
 
-	// r.Get("/projects", middlewares.JSONResponseMiddleware(handlers.GetProjectsHandler, appCtx))
-	// r.Get("/projects/{id}", middlewares.JSONResponseMiddleware(handlers.GetProjectsByIDHandler, appCtx))
+	r.Get("/projects", run_processor.JSONResponseMiddleware(sctx, projects.GetProjectsHandler))
+	r.Get("/projects/{id}", run_processor.JSONResponseMiddleware(sctx, projects.GetProjectsByIDHandler))
 
-	// r.Route("/api/auth", func(r chi.Router) {
-	// 	r.Post("/login", middlewares.JSONResponseMiddleware(handlers.HandleLogin, appCtx))
-	// })
+	r.Route("/api/auth", func(r chi.Router) {
+		r.Post("/login", run_processor.JSONResponseMiddleware(sctx, auth.HandleLogin))
+		r.Get("/token", run_processor.JSONResponseMiddleware(sctx, auth.CheckTokenHandler))
+	})
 
 	// // Защищенные маршруты
 	// r.Group(func(r chi.Router) {

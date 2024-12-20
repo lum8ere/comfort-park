@@ -28,9 +28,6 @@ type ISmartContext interface {
 	WithField(key string, value interface{}) ISmartContext // будут заполнять поля в DataField
 	WithFields(fields types.Fields) ISmartContext          // будут заполнять поля в DataField
 
-	// Методы доступа к основным ресурсам
-	// GetDB() *gorm.DB
-	// GetConfig() *Config // Предполагается, что у вас есть тип Config
 	GetLogger() *zap.Logger
 
 	WithDbManager(db IDbManager) ISmartContext

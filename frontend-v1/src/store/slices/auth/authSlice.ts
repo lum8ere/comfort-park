@@ -29,20 +29,30 @@ export const login = createAsyncThunk(
     'auth/login',
     async (credentials: { email: string; password: string }, { rejectWithValue }) => {
         try {
-            const response = await axios.post('/api/auth/login', credentials);
+            const formData = new FormData();
+            formData.append('email', credentials.email);
+            formData.append('password', credentials.password);
+
+            const response = await axios.post('/api/auth/login', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            
             return response.data; // Ожидается { token: string }
         } catch (err: any) {
-            return rejectWithValue(err.response.data.error || 'Ошибка при входе');
+            return rejectWithValue(err.response?.data?.error || 'Ошибка при входе');
         }
     }
 );
+
 
 // Асинхронный экшен для получения данных пользователя
 export const fetchUser = createAsyncThunk(
     'auth/fetchUser',
     async (_, { rejectWithValue }) => {
         try {
-            const response = await axios.get('/api/auth/me'); // Предполагаемый эндпоинт
+            const response = await axios.get('/api/auth/token'); // Предполагаемый эндпоинт
             return response.data; // Ожидается { user: User }
         } catch (err: any) {
             return rejectWithValue(err.response.data.error || 'Не удалось получить данные пользователя');
