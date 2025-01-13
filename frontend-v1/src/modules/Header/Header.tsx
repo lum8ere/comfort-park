@@ -79,7 +79,7 @@ export const Header = () => {
                     {/* Внизу Drawer – телефон и кнопка "Заказать звонок" на мобильных */}
                     <div className="drawer__footer">
                         <div className="drawer__phone">{COMPANY_PHONE}</div>
-                        <Button
+                        {/* <Button
                             type="text"
                             className="drawer__call-button"
                             onClick={() => {
@@ -89,7 +89,8 @@ export const Header = () => {
                             block
                         >
                             Заказать звонок
-                        </Button>
+                        </Button> */}
+                        <span className="drawer__call-button">Позвоните нам</span>
                     </div>
                 </Drawer>
             </div>
