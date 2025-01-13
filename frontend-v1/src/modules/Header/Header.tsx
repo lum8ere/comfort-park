@@ -4,13 +4,15 @@ import { MenuOutlined } from '@ant-design/icons';
 import { useState } from 'react';
 import './Header.scss';
 
+const PHONE_NUMBER = '+7 (987) 673-51-55';
+
 export const Header = () => {
     const navigate = useNavigate();
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
     const navItems = [
         { label: 'Каталог', path: '/catalog' },
-        { label: 'Наши проекты', path: '/projects' },
+        // { label: 'Наши проекты', path: '/projects' },
         { label: 'О нас', path: '/about' },
         { label: 'Услуги', path: '/services' },
         { label: 'Контакты', path: '/contacts' }
@@ -21,7 +23,8 @@ export const Header = () => {
             <div className="header__container">
                 {/* Левая часть: Логотип */}
                 <div className="header__left" onClick={() => navigate('/')}>
-                    Парк-комфорт
+                    <div className="header__title">ТСН Парк Комфорт</div>
+                    <div className="header__subtitle">коттеджный поселок</div>
                 </div>
 
                 {/* Центральная часть: Навигационные кнопки (на больших экранах) */}
@@ -42,15 +45,9 @@ export const Header = () => {
 
                 {/* Правая часть: Номер телефона и кнопка "Заказать звонок" (на больших экранах) */}
                 <div className="header__right">
-                    <span className="header__phone">+7 (123) 456-78-90</span>
+                    <span className="header__phone">{PHONE_NUMBER}</span>
                     <span className="header__separator">|</span>
-                    <Button
-                        type="text"
-                        className="header__call-button"
-                        // onClick={() => navigate('/request-call')}
-                    >
-                        Заказать звонок
-                    </Button>
+                    <span className="header__text">Позвоните нам</span>
                 </div>
 
                 {/* Бургер-иконка для мобильной версии */}
@@ -82,7 +79,7 @@ export const Header = () => {
 
                     {/* Внизу Drawer – телефон и кнопка "Заказать звонок" на мобильных */}
                     <div className="drawer__footer">
-                        <div className="drawer__phone">+7 (123) 456-78-90</div>
+                        <div className="drawer__phone">{PHONE_NUMBER}</div>
                         <Button
                             type="text"
                             className="drawer__call-button"

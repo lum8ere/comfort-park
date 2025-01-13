@@ -23,11 +23,15 @@
 
 .header__left {
     display: flex;
-    align-items: center;
+    flex-direction: column; /* Располагаем элементы по вертикали */
+    align-items: flex-start; /* Выравниваем текст по левому краю */
     cursor: pointer;
     font-size: $logo-font-size;
     font-weight: bold;
     color: $logo-color;
+
+    /* Дополнительные стили для расстояния между строками, если нужно */
+    line-height: 1.2; /* Высота строки для более компактного вида */
 }
 
 .header__center {
@@ -62,6 +66,12 @@
 .header__phone {
     font-size: $phone-font-size;
     color: $phone-color;
+}
+
+.header__text {
+    font-size: $phone-font-size;
+    color: $phone-color;
+    padding-right: 10px;
 }
 
 .header__separator {
