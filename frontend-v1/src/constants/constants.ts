@@ -1,2 +1,3 @@
-export const COMPANY_NAME = 'Парк-комфорт';
-export const COMPANY_PHONE = '+7 919 231 23 23';
+export const COMPANY_NAME = 'ТСН Парк Комфорт';
+export const COMPANY_PHONE = '+7 (987) 673-51-55';
+export const COMPANY_PHONE_2 = '+7 (930) 710-95-63';

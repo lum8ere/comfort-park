@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Layout, Button, Tooltip, Row, Col, Typography } from 'antd';
 import { SOCIAL_LINKS } from 'constants/socialLinks';
-import { COMPANY_NAME, COMPANY_PHONE } from 'constants/constants';
+import { COMPANY_NAME, COMPANY_PHONE, COMPANY_PHONE_2 } from 'constants/constants';
 import { Link } from 'react-router-dom'; // Если используете react-router
 import './Footer.scss';
 import { useAppDispatch } from 'store/hooks';
@@ -35,7 +35,7 @@ export const Footer = () => {
                                 Логотип компании
                             </div>
                             {/* Иконки социальных сетей */}
-                            <div className="social-icons">
+                            {/* <div className="social-icons">
                                 {SOCIAL_LINKS.map((link) => (
                                     <Tooltip title={link.name} key={link.name}>
                                         <a
@@ -51,14 +51,12 @@ export const Footer = () => {
                                         </a>
                                     </Tooltip>
                                 ))}
-                            </div>
+                            </div> */}
                             <Title level={5}>{COMPANY_NAME}</Title>
-                            <Text
-                                style={{
-                                    color: 'white'
-                                }}
-                            >
+                            <Text style={{ color: 'white' }}>
                                 Телефон: {COMPANY_PHONE}
+                                <br />
+                                {COMPANY_PHONE_2}
                             </Text>
                         </div>
                     </Col>
@@ -80,7 +78,7 @@ export const Footer = () => {
                         </div>
                     </Col>
                     {/* БЛОК 3 - ПРИМЕРЫ РАБОТ */}
-                    <Col xs={24} sm={12} md={6}>
+                    {/* <Col xs={24} sm={12} md={6}>
                         <div className="footer-block">
                             <Title level={5}>Наши работы</Title>
                             <ul className="footer-list">
@@ -89,7 +87,7 @@ export const Footer = () => {
                                 </li>
                             </ul>
                         </div>
-                    </Col>
+                    </Col> */}
                     {/* БЛОК 4 - О НАС */}
                     <Col xs={24} sm={12} md={6}>
                         <div className="footer-block">

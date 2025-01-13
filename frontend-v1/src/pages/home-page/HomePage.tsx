@@ -33,15 +33,34 @@ export const HomePage = () => {
                 <div className="hero-overlay">
                     <div className="hero-content">
                         <Title level={1} className="hero-title">
-                            Строительство домов и коттеджей под ключ в Чебоксарах
+                            Старт продаж одноэтажных кирпичных домов 
+                            от застройщика в Нижегородской
+                            области
                         </Title>
-                        <Paragraph className="hero-subtitle">
-                            Без изменения цен в ходе строительства <br />
-                            Качественные дома под ключ от 400 тыс. рублей <br />
-                            Строительство домов с гарантией и оплатой по факту завершения работ{' '}
-                            <br />
-                            Фото- и видео-отчеты в процессе строительства
-                        </Paragraph>
+                        {/* <Paragraph className="hero-subtitle">
+                            Преимущества поселка: <br />
+                            Одноэтажные кирпичные дома от застройщика <br />
+                            Дома из блоков <br />
+                            Земельный участок 8 соток <br />
+                            Коммуникации <br />
+                            Отделка под ключ <br />
+                            Сельская, семейная и Айти ипотеки <br />
+                        </Paragraph> */}
+                        <Paragraph className="hero-subtitle">Преимущества поселка:</Paragraph>
+
+                        <div className="benefits-wrapper">
+                            <ul className="benefits-list benefits-list-left">
+                                <li>Одноэтажные кирпичные дома от застройщика</li>
+                                <li>Дома из блоков</li>
+                                <li>Земельный участок 8 соток</li>
+                            </ul>
+                            <ul className="benefits-list benefits-list-right">
+                                <li>Коммуникации</li>
+                                <li>Отделка под ключ</li>
+                                <li>Сельская, семейная и Айти ипотеки</li>
+                                {/* <li>Фото- и видео-отчеты в процессе строительства</li> */}
+                            </ul>
+                        </div>
                     </div>
                     <div className="hero-buttons">
                         <Button

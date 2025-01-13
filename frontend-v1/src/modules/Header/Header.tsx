@@ -2,9 +2,8 @@ import { useNavigate } from 'react-router-dom';
 import { Button, Layout, Space, Drawer } from 'antd';
 import { MenuOutlined } from '@ant-design/icons';
 import { useState } from 'react';
+import { COMPANY_NAME, COMPANY_PHONE, COMPANY_PHONE_2 } from 'constants/constants';
 import './Header.scss';
-
-const PHONE_NUMBER = '+7 (987) 673-51-55';
 
 export const Header = () => {
     const navigate = useNavigate();
@@ -23,7 +22,7 @@ export const Header = () => {
             <div className="header__container">
                 {/* Левая часть: Логотип */}
                 <div className="header__left" onClick={() => navigate('/')}>
-                    <div className="header__title">ТСН Парк Комфорт</div>
+                    <div className="header__title">{COMPANY_NAME}</div>
                     <div className="header__subtitle">коттеджный поселок</div>
                 </div>
 
@@ -45,7 +44,7 @@ export const Header = () => {
 
                 {/* Правая часть: Номер телефона и кнопка "Заказать звонок" (на больших экранах) */}
                 <div className="header__right">
-                    <span className="header__phone">{PHONE_NUMBER}</span>
+                    <span className="header__phone">{COMPANY_PHONE}</span>
                     <span className="header__separator">|</span>
                     <span className="header__text">Позвоните нам</span>
                 </div>
@@ -79,7 +78,7 @@ export const Header = () => {
 
                     {/* Внизу Drawer – телефон и кнопка "Заказать звонок" на мобильных */}
                     <div className="drawer__footer">
-                        <div className="drawer__phone">{PHONE_NUMBER}</div>
+                        <div className="drawer__phone">{COMPANY_PHONE}</div>
                         <Button
                             type="text"
                             className="drawer__call-button"

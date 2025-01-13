@@ -62,7 +62,7 @@ export const BuildingCard: React.FC<BuildingCardProps> = ({
                 {badge && <div className="badge">{badge}</div>}
             </div>
             <div className="content-section">
-                <Title level={4} className="building-card-title">{`Проект "${name}"`}</Title>
+                <Title level={4} className="building-card-title">{`${name}`}</Title>
 
                 <div className="column-section">
                     <div className="info-column">

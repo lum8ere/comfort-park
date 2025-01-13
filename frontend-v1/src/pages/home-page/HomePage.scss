@@ -32,8 +32,9 @@
             z-index: 2; // Поверх изображения
 
             .hero-content {
-                max-width: 1200px;
+                max-width: 1400px;
                 color: #ffffff; // Убедитесь, что цвет текста белый
+                margin-left: 120px;
 
                 .hero-title {
                     font-size: 60px;
@@ -44,11 +45,58 @@
                 }
 
                 .hero-subtitle {
-                    font-size: 24px;
+                    font-size: 32px;
                     line-height: 1.6;
                     margin-bottom: 32px;
                     color: #ffffff; // Убедитесь, что цвет остаётся белым
                     padding-left: 24px;
+                }
+
+                .hero-subtitle {
+                    // Сюда можно добавить дополнительные стили для заголовка «Преимущества поселка:»
+                    margin-bottom: 16px;
+                }
+            
+                .benefits-wrapper {
+                    display: flex;
+                    gap: 2rem; // Расстояние между колонками
+                    font-size: 28px;
+                    
+                    // Чтобы на мобильном устроиться в столбик, можно ниже в @media (max-width: 768px) переопределить:
+                    @media (max-width: 768px) {
+                        flex-direction: column;
+                        gap: 1rem;
+                    }
+                }
+            
+                .benefits-list {
+                    list-style: none; // Убираем стандартные маркеры ul
+                    // padding: 0;
+                    margin: 0;
+            
+                    li {
+                        position: relative;
+                        padding-left: 1.5rem; // Отступ слева, чтобы * не налезала на текст
+                        margin-bottom: 0.5rem; // Отступ между пунктами (на вкус)
+            
+                        &::before {
+                            content: "•";
+                            position: absolute;
+                            left: 0;
+                            color: #ffffff; // Цвет звёздочки, подберите под ваш дизайн
+                            // Можно настроить размер звёздочки, если хочется побольше:
+                            // font-size: 1.2rem;
+                        }
+                    }
+                }
+            
+                // Если нужно какие-то отдельные стили для левой/правой колонки,
+                // то используйте вложенные классы:
+                .benefits-list-left {
+                    // свои стили
+                }
+                .benefits-list-right {
+                    // свои стили
                 }
             }
 
@@ -128,7 +176,7 @@
                     }
 
                     .hero-subtitle {
-                        font-size: 1rem;
+                        font-size: 32px;
                         padding-left: 0;
                         color: #ffffff; // Явно задаём белый цвет текста
                     }
