@@ -1,10 +1,8 @@
-// HomePage.scss
-
 .homepage {
     .hero {
         position: relative;
         width: 100%;
-        min-height: 969px; // Используем min-height вместо фиксированной высоты
+        min-height: 969px;
         overflow: hidden;
 
         .hero-image {
@@ -14,7 +12,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            z-index: 1; // Убедитесь, что изображение находится позади контента
+            z-index: 1;
         }
 
         .hero-overlay {
@@ -29,11 +27,11 @@
             gap: 136px;
             padding: 82px 96px 94px 96px;
             box-sizing: border-box;
-            z-index: 2; // Поверх изображения
+            z-index: 2;
 
             .hero-content {
                 max-width: 1400px;
-                color: #ffffff; // Убедитесь, что цвет текста белый
+                color: #ffffff;
                 margin-left: 120px;
 
                 .hero-title {
@@ -42,61 +40,47 @@
                     line-height: 1.2;
                     margin-bottom: 24px;
                     color: #ffffff;
+                    hyphens: auto;
+                    word-break: keep-all;
                 }
 
                 .hero-subtitle {
                     font-size: 32px;
                     line-height: 1.6;
                     margin-bottom: 32px;
-                    color: #ffffff; // Убедитесь, что цвет остаётся белым
                     padding-left: 24px;
+                    color: #ffffff; // Добавил явное указание цвета
                 }
 
-                .hero-subtitle {
-                    // Сюда можно добавить дополнительные стили для заголовка «Преимущества поселка:»
-                    margin-bottom: 16px;
-                }
-            
                 .benefits-wrapper {
                     display: flex;
-                    gap: 2rem; // Расстояние между колонками
+                    gap: 2rem;
                     font-size: 28px;
                     
-                    // Чтобы на мобильном устроиться в столбик, можно ниже в @media (max-width: 768px) переопределить:
                     @media (max-width: 768px) {
                         flex-direction: column;
                         gap: 1rem;
                     }
                 }
-            
+
                 .benefits-list {
-                    list-style: none; // Убираем стандартные маркеры ul
-                    // padding: 0;
+                    list-style: none;
                     margin: 0;
-            
+                    padding: 0;
+                    color: #ffffff; // Добавил цвет для списка
+
                     li {
                         position: relative;
-                        padding-left: 1.5rem; // Отступ слева, чтобы * не налезала на текст
-                        margin-bottom: 0.5rem; // Отступ между пунктами (на вкус)
-            
+                        padding-left: 1.5rem;
+                        margin-bottom: 0.5rem;
+
                         &::before {
                             content: "•";
                             position: absolute;
                             left: 0;
-                            color: #ffffff; // Цвет звёздочки, подберите под ваш дизайн
-                            // Можно настроить размер звёздочки, если хочется побольше:
-                            // font-size: 1.2rem;
+                            color: #ffffff;
                         }
                     }
-                }
-            
-                // Если нужно какие-то отдельные стили для левой/правой колонки,
-                // то используйте вложенные классы:
-                .benefits-list-left {
-                    // свои стили
-                }
-                .benefits-list-right {
-                    // свои стили
                 }
             }
 
@@ -116,10 +100,7 @@
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    text-align: center;
                     transition: background-color 0.3s, color 0.3s;
-                    cursor: pointer;
-                    box-sizing: border-box;
                 }
 
                 .calculate-button {
@@ -128,7 +109,7 @@
                     border: none;
 
                     &:hover {
-                        background-color: #a71818;
+                        background-color: #a71818 !important;
                     }
                 }
 
@@ -138,8 +119,8 @@
                     border: 2px solid #8e3131;
 
                     &:hover {
-                        color: #ffffff;
-                        background-color: #8e3131;
+                        color: #ffffff !important;
+                        background-color: #8e3131 !important;
                     }
                 }
             }
@@ -149,146 +130,122 @@
     .services {
         padding: 2rem 1rem;
         width: 100%;
-        background-color: #f0f0f0; // Временный фон для отладки, удалить после
+        background-color: #f0f0f0;
     }
 
-    // Медиа-запросы для мобильных устройств
     @media (max-width: 768px) {
         .hero {
-            min-height: auto; // Позволяет блоку подстраиваться по содержимому
-            height: auto;
+            min-height: 100vh; // Фиксируем высоту
+            background: #000;
+            display: flex;
+            flex-direction: column;
 
-            // .hero-image {
-            //     height: 50vh;
-            // }
+            .hero-image {
+                position: absolute; // Возвращаем абсолютное позиционирование
+                height: 100%;
+                min-height: auto;
+            }
 
             .hero-overlay {
-                position: relative; // Изменили с absolute на relative для корректного позиционирования
-                flex-direction: column;
-                gap: 5vh;
-                padding: 5vh 5vw;
+                position: absolute; // Оверлей поверх изображения
+                padding: 40px 20px;
+                gap: 40px;
+                background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7));
 
                 .hero-content {
+                    margin-left: 0;
                     text-align: center;
 
                     .hero-title {
-                        font-size: 2.5rem;
+                        font-size: 32px !important;
+                        line-height: 1.3;
+                        margin-bottom: 20px;
                     }
 
                     .hero-subtitle {
-                        font-size: 32px;
+                        font-size: 24px !important;
                         padding-left: 0;
-                        color: #ffffff; // Явно задаём белый цвет текста
+                        margin-bottom: 20px;
+                    }
+
+                    .benefits-wrapper {
+                        font-size: 18px;
+                        
+                        li {
+                            padding-left: 25px;
+                            text-align: left;
+                            
+                            &::before {
+                                font-size: 24px;
+                                left: 5px;
+                                top: -2px;
+                            }
+                        }
                     }
                 }
 
                 .hero-buttons {
                     flex-direction: column;
-                    justify-content: center;
-
+                    gap: 20px;
+                    
                     .calculate-button,
                     .projects-button {
-                        width: 100%;
-                        height: 3rem;
-                        font-size: 1rem;
-                        margin-bottom: 1rem;
-                    }
-
-                    .projects-button {
-                        margin-bottom: 0;
+                        width: 100% !important;
+                        height: 60px !important;
+                        font-size: 18px !important;
                     }
                 }
             }
         }
 
         .services {
-            padding: 1rem;
+            padding: 40px 0;
+        }
+
+        .custom-modal {
+            max-width: 95vw !important;
+            top: 20px;
+            
+            .ant-modal-content {
+                padding: 15px;
+            }
+            
+            #calculator-iframe {
+                height: 70vh;
+                min-height: 500px;
+            }
         }
     }
 
     .custom-modal {
         .ant-modal-content {
-            background-color: #1a1a1a; // Замените на основной цвет вашего сайта
-            color: #ffffff; // Цвет текста
-            border-radius: 12px; // Закругленные углы, при необходимости
+            background-color: #1a1a1a;
+            color: #ffffff;
+            border-radius: 12px;
         }
 
         .ant-modal-header {
-            background-color: #8e3131; // Цвет заголовка
-            border-bottom: 1px solid #8e3131; // Цвет нижней границы заголовка
+            background-color: #8e3131;
+            border-bottom: 1px solid #8e3131;
         }
 
         .ant-modal-title {
-            color: #ffffff; // Цвет заголовка
-            font-size: 24px; // Размер шрифта заголовка
+            color: #ffffff;
+            font-size: 24px;
             font-weight: bold;
         }
 
         .ant-modal-footer {
-            background-color: #1a1a1a; // Цвет фона нижней части модального окна
-            border-top: none; // Убираем верхнюю границу
-            display: flex;
-            justify-content: flex-end;
-
+            background-color: #1a1a1a;
+            border-top: none;
+            
             .ant-btn-primary {
                 background-color: #8e3131;
                 border-color: #8e3131;
 
-                &:hover,
-                &:focus {
+                &:hover {
                     background-color: #a71818;
-                    border-color: #a71818;
                 }
-            }
-
-            .ant-btn {
-                color: #ffffff;
-
-                &:hover,
-                &:focus {
-                    color: #ffffff;
-                }
-            }
-        }
-
-        // Настройка iframe внутри модального окна
-        #calculator-iframe {
-            width: 100%;
-            height: 600px; // Убедитесь, что высота достаточна для отображения калькулятора
-            border: none;
-            border-radius: 8px;
-        }
-
-        // Адаптивность для мобильных устройств
-        @media (max-width: 768px) {
-            .ant-modal-content {
-                padding: 16px;
-            }
-
-            .ant-modal-header {
-                padding: 16px;
-            }
-
-            .ant-modal-title {
-                font-size: 20px;
-            }
-
-            .ant-modal-footer {
-                flex-direction: column;
-                align-items: stretch;
-
-                .ant-btn {
-                    width: 100%;
-                    margin-bottom: 8px;
-
-                    &:last-child {
-                        margin-bottom: 0;
-                    }
-                }
-            }
-
-            #calculator-iframe {
-                height: 400px;
             }
         }
     }
