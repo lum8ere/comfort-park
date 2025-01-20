@@ -61,7 +61,7 @@ export const ServicesCarousel = () => {
                 <Title level={2} className="carousel-title">
                     Наши услуги
                 </Title>
-                <Spin tip="Загрузка услуг..." />
+                <Spin />
             </div>
         );
     }
