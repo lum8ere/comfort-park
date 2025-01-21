@@ -85,7 +85,12 @@ export const ServicePage = memo(() => {
                         md={8} // на десктопах 3 карточки в ряд
                         style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
                     >
-                        <ServiceCard imageURL={service.image_url} name={service.name} />
+                        <ServiceCard
+                            imageURL={service.image_url}
+                            name={service.name}
+                            description={service.description}
+                            price={service.price}
+                        />
                     </Col>
                 ))}
             </Row>

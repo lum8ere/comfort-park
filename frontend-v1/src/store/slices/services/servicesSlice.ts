@@ -7,7 +7,7 @@ export interface Service {
     description: string;
     price: number;
     image_url: string; //
-    isActive: boolean; // Активный статус
+    is_active: boolean; // Активный статус
 };
 
 interface ServicesState {
