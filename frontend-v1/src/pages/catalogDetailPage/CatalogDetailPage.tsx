@@ -19,7 +19,7 @@ interface Photo {
     url: string;
     building_id: string;
     is_gallery: boolean;
-    created_at: string; // или Date, в зависимости от реализации
+    created_at: string;
 }
 
 interface Building {
@@ -31,11 +31,10 @@ interface Building {
     floors: number;
     price: number | string;
     description: string;
-    // Добавьте другие необходимые поля
 }
 
 export const CatalogDetailPage: React.FC = () => {
-    const { id } = useParams<{ id: string }>(); // Получаем ID из URL
+    const { id } = useParams<{ id: string }>();
     const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number>(0);
     const dispatch = useAppDispatch();
 
@@ -88,7 +87,6 @@ export const CatalogDetailPage: React.FC = () => {
     }
 
     const photos = building.Photos;
-    const mainPhoto = photos[selectedPhotoIndex];
 
     return (
         <div className="catalog-detail-page">
@@ -99,10 +97,10 @@ export const CatalogDetailPage: React.FC = () => {
                 <div className="catalog-detail-left">
                     {photos.length > 0 && (
                         <div className="photo-gallery">
-                            <PreviewGroup>
+                            <PreviewGroup items={photos.map(photo => photo.url)}>
                                 <div className="main-photo-wrapper">
                                     <Image
-                                        src={mainPhoto?.url}
+                                        src={photos[selectedPhotoIndex]?.url}
                                         alt={`Изображение ${selectedPhotoIndex + 1}`}
                                         className="main-photo"
                                         preview={{
@@ -112,23 +110,24 @@ export const CatalogDetailPage: React.FC = () => {
                                 </div>
                                 {photos.length > 1 && (
                                     <div className="thumbnails">
-                                        {photos.map((photo, index) => {
-                                            if (index === selectedPhotoIndex) return null;
-                                            return (
-                                                <div
-                                                    key={photo.id}
-                                                    className="thumbnail-wrapper"
-                                                    onClick={() => setSelectedPhotoIndex(index)}
-                                                >
-                                                    <Image
-                                                        src={photo.url}
-                                                        alt={`Миниатюра ${index + 1}`}
-                                                        className="thumbnail"
-                                                        preview={false}
-                                                    />
-                                                </div>
-                                            );
-                                        })}
+                                        {photos.map((photo, index) => (
+                                            <div
+                                                key={photo.id}
+                                                className="thumbnail-wrapper"
+                                                style={{ display: index === selectedPhotoIndex ? 'none' : 'flex' }}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setSelectedPhotoIndex(index);
+                                                }}
+                                            >
+                                                <Image
+                                                    src={photo.url}
+                                                    alt={`Миниатюра ${index + 1}`}
+                                                    className="thumbnail"
+                                                    preview={{ mask: false }}
+                                                />
+                                            </div>
+                                        ))}
                                     </div>
                                 )}
                             </PreviewGroup>

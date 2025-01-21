@@ -26,21 +26,20 @@ export const AboutPage: React.FC = () => {
                 <Row gutter={[20, 20]} className="aboutSection-inner">
                     <Col xs={24} md={8} className="aboutSection-imageWrap">
                         <Card
-                            hoverable
-                            cover={
-                                <img
-                                    src="src/assets/image2.png"
-                                    alt="Свидетель из Фрязино"
-                                    style={{ borderRadius: '10px 10px 0 0' }}
-                                />
-                            }
+                            // hoverable
+                            // cover={
+                            //     // <img
+                            //     //     src="src/assets/image2.png"
+                            //     //     alt="Свидетель из Фрязино"
+                            //     //     style={{ borderRadius: '10px 10px 0 0' }}
+                            //     // />
+                            //     <p>ЛОГО</p>
+                            // }
                             style={{ borderRadius: '10px', overflow: 'hidden' }}
                             styles={{ body: { textAlign: 'center' } }}
                         >
                             <div style={{ fontWeight: 'bold' }}>
-                                Свидетель из Фрязино
-                                <br />
-                                Генеральный директор
+                                Тут должно быть лого
                             </div>
                         </Card>
                     </Col>

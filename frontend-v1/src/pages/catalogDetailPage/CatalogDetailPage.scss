@@ -72,6 +72,10 @@
                         max-height: 100%;
                         object-fit: cover;
                     }
+
+                    &[style*="display: none"] {
+                        display: none !important;
+                    }
                 }
             }
         }
