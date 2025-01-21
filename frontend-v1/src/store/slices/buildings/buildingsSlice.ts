@@ -39,7 +39,6 @@ const initialState: BuildingsState = {
 // Асинхронное действие для получения зданий
 export const fetchBuildings = createAsyncThunk('buildings/fetch', async () => {
     const response = await axiosInstance.get<Building[]>('/buildings');
-    console.log("response.data", response.data)
     return response.data;
 });
 

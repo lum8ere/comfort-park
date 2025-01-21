@@ -17,7 +17,6 @@ export const CatalogPage = () => {
 
     // Селектор для получения всех зданий
     const buildings = useSelector(selectBuildings);
-    console.log("buildings catalog", buildings)
 
     const { loading, error } = useSelector((state: RootState) => state.buildings);
 

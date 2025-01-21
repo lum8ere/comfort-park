@@ -137,7 +137,6 @@ export const ProjectDetailPage = () => {
                                             <Image.PreviewGroup>
                                                 <div className="review-photos">
                                                     {parsePhotos(review.photos).map((photoUrl, idx) => {
-                                                        console.log("photoUrl", photoUrl)
                                                         return (
                                                             <Image
                                                             key={idx}

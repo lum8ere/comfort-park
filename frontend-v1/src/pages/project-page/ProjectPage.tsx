@@ -26,8 +26,6 @@ export const ProjectPage = memo(() => {
         dispatch(fetchProjects());
     }, [dispatch]);
 
-    console.log("projects", projects);
-
     const reloadSerivce = () => {
         dispatch(fetchServices());
     };

@@ -39,10 +39,6 @@ func InitRoutes(sctx smart_context.ISmartContext, r *chi.Mux) {
 		r.Put("/prod/buildings/{id}", run_processor.JSONResponseMiddleware(sctx, buildings.UpdateBuildingHandler))
 		r.Delete("/prod/buildings/{id}", run_processor.JSONResponseMiddleware(sctx, buildings.DeleteBuildingHandler))
 
-		// r.Post("/prod/projects", middlewares.JSONResponseMiddleware(handlers.CreateProjectHandler, appCtx))
-		// r.Put("/prod/services/{id}", middlewares.JSONResponseMiddleware(handlers.UpdateServiceHandler, appCtx))
-		// r.Delete("/prod/services/{id}", middlewares.JSONResponseMiddleware(handlers.DeleteServiceHandler, appCtx))
-
 		// r.Post("/prod/services", middlewares.JSONResponseMiddleware(handlers.CreateServiceHandler, appCtx))
 		// r.Put("/prod/projects/{id}", middlewares.JSONResponseMiddleware(handlers.UpdateProjectHandler, appCtx))
 		// r.Delete("/prod/projects/{id}", middlewares.JSONResponseMiddleware(handlers.DeleteProjectHandler, appCtx))
