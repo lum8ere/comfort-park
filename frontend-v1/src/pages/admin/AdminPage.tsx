@@ -26,8 +26,6 @@ const AdminPage: React.FC = () => {
         switch (activeSection) {
             case 'buildings':
                 return <BuildingsManagement />;
-            case 'projects':
-                return <ProjectsManagement />;
             case 'services':
                 return <ServicesManagement />;
             default:
@@ -46,13 +44,10 @@ const AdminPage: React.FC = () => {
             label: 'Управление зданиями',
         },
         {
-            key: 'projects',
-            label: 'Управление проектами',
-        },
-        {
             key: 'services',
             label: 'Управление услугами',
         },
+        
     ];
 
     const menu = (
@@ -60,7 +55,7 @@ const AdminPage: React.FC = () => {
             mode="inline"
             selectedKeys={[activeSection]}
             onClick={({ key }) =>
-                setActiveSection(key as 'buildings' | 'projects' | 'services')
+                setActiveSection(key as 'buildings' | 'services')
             }
             items={menuItems}
         />
@@ -89,6 +84,7 @@ const AdminPage: React.FC = () => {
             ) : (
                 <Sider className="admin-page__sidebar" width={200} style={{ background: '#fff' }}>
                     {menu}
+                    <span onClick={handleLogout} style={{ cursor: 'pointer' }}>Выйти</span>
                 </Sider>
             )}
             <Layout>

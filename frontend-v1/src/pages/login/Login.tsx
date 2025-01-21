@@ -57,7 +57,7 @@ const Login: React.FC = () => {
                 </Form.Item>
 
                 <Form.Item>
-                    <Button type="primary" htmlType="submit" loading={auth.loading} block>
+                    <Button type="primary" htmlType="submit" loading={auth.loading} block style={{backgroundColor: "#8e3131"}}>
                         Войти
                     </Button>
                 </Form.Item>

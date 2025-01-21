@@ -1,4 +1,5 @@
 // src/pages/admin/ProjectsManagement.tsx
+// НЕ ИСПОЛЬЗУЕТСЯ
 
 import React, { useState } from 'react';
 import { Table, Form, Input, Button, Upload, notification, Modal, Popconfirm } from 'antd';

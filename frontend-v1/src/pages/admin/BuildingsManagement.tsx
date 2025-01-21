@@ -143,7 +143,7 @@ const BuildingsManagement: React.FC = () => {
     return (
         <div>
             <h2>Управление зданиями</h2>
-            <Button type="primary" onClick={openAddModal}>
+            <Button type="primary" onClick={openAddModal} style={{backgroundColor: "#8e3131"}}>
                 Добавить здание
             </Button>
 

@@ -132,7 +132,7 @@ const ServicesManagement: React.FC = () => {
     return (
         <div>
             <h2>Управление услугами</h2>
-            <Button type="primary" onClick={openAddModal}>
+            <Button type="primary" onClick={openAddModal} style={{backgroundColor: "#8e3131"}}>
                 Добавить услугу
             </Button>
             <Table
